@@ -3,6 +3,7 @@ using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microcharts;
+using Microsoft.Extensions.Logging;
 using NutriMind.Mobile.Helpers;
 using NutriMind.Mobile.Models.Dashboard;
 using NutriMind.Mobile.Services.Api;
@@ -13,6 +14,7 @@ namespace NutriMind.Mobile.ViewModels.History;
 public partial class HistoryViewModel : ObservableObject
 {
     private readonly IApiService _apiService;
+    private readonly ILogger<HistoryViewModel> _logger;
 
     // Meta calórica temporal: todavía no existe un endpoint que exponga la meta real del
     // usuario (NutritionGoal.TargetCalories no está expuesto al móvil). 2000 kcal/día es el
@@ -49,9 +51,10 @@ public partial class HistoryViewModel : ObservableObject
 
     public ObservableCollection<DailySummaryDto> DailySummaries { get; } = new();
 
-    public HistoryViewModel(IApiService apiService)
+    public HistoryViewModel(IApiService apiService, ILogger<HistoryViewModel> logger)
     {
         _apiService = apiService;
+        _logger = logger;
     }
 
     [RelayCommand]
@@ -117,7 +120,7 @@ public partial class HistoryViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine($"[HistoryViewModel] Error cargando historial: {ex.Message}");
+            _logger.LogError(ex, "Error cargando historial");
         }
         finally
         {

@@ -1,4 +1,5 @@
 using CommunityToolkit.Maui;
+using Microsoft.Extensions.Logging;
 using NutriMind.Mobile.Services.Api;
 using NutriMind.Mobile.Services.Storage;
 using NutriMind.Mobile.Helpers;
@@ -9,11 +10,11 @@ using NutriMind.Mobile.Views.AI;
 using NutriMind.Mobile.ViewModels.Food;
 using NutriMind.Mobile.Views.Food;
 
-using SkiaSharp.Views.Maui.Controls.Hosting; // <-- AGREGAR ESTO
+using SkiaSharp.Views.Maui.Controls.Hosting;
 using Microcharts.Maui;
 using UraniumUI;
 using NutriMind.Mobile.Views.Home;
-using NutriMind.Mobile.ViewModels.Home;                      // <-- AGREGAR ESTO
+using NutriMind.Mobile.ViewModels.Home;
 using NutriMind.Mobile.ViewModels.MealPlans;
 using NutriMind.Mobile.Views.MealPlans;
 using NutriMind.Mobile.ViewModels.Profile;
@@ -29,6 +30,8 @@ public static class MauiProgram
     public static MauiApp CreateMauiApp()
     {
         var builder = MauiApp.CreateBuilder();
+
+        builder.Logging.AddDebug();
 
         builder
             .UseMauiApp<App>()
@@ -90,11 +93,6 @@ public static class MauiProgram
 
         builder.Services.AddTransient<AIAssistantViewModel>();
         builder.Services.AddTransient<AIAssistantPage>();
-
-        builder.Services.AddTransient<NutriMind.Mobile.ViewModels.Food.AddFoodViewModel>();
-        builder.Services.AddTransient<NutriMind.Mobile.Views.Food.AddFoodPage>();
-
-
 
         builder.Services.AddTransient<FoodLogViewModel>();
         builder.Services.AddTransient<FoodLogPage>();

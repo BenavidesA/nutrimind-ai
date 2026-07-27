@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microcharts;
+using Microsoft.Extensions.Logging;
 using NutriMind.Mobile.Helpers;
 using NutriMind.Mobile.Models.Dashboard;
 using NutriMind.Mobile.Services.Api;
@@ -17,11 +18,13 @@ public partial class HomeViewModel : ObservableObject
 {
     private readonly IApiService _apiService;
     private readonly ISecureStorageService _secureStorageService;
+    private readonly ILogger<HomeViewModel> _logger;
 
-    public HomeViewModel(IApiService apiService, ISecureStorageService secureStorageService)
+    public HomeViewModel(IApiService apiService, ISecureStorageService secureStorageService, ILogger<HomeViewModel> logger)
     {
         _apiService = apiService;
         _secureStorageService = secureStorageService;
+        _logger = logger;
     }
 
     [ObservableProperty] private int streak;
@@ -87,7 +90,7 @@ public partial class HomeViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine($"[HomeViewModel] Error cargando datos: {ex.Message}");
+            _logger.LogError(ex, "Error cargando datos");
         }
         finally
         {

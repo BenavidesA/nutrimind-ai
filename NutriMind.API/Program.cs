@@ -77,8 +77,8 @@ builder.Services.AddSwaggerGen(c =>
         Description = "Pega tu token aqu� (NO escribas 'Bearer', solo pega el token crudo)",
         Name = "Authorization",
         In = ParameterLocation.Header,
-        Type = SecuritySchemeType.Http, // <-- Este es el truco m�gico
-        Scheme = "bearer",              // <-- En min�sculas
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
         BearerFormat = "JWT"
     });
 

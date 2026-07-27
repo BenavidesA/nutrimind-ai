@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.Logging;
 using NutriMind.Mobile.Models.Profile;
 using NutriMind.Mobile.Services.Api;
 
@@ -10,10 +11,12 @@ namespace NutriMind.Mobile.ViewModels.Profile;
 public partial class ProfileViewModel : ObservableObject
 {
     private readonly IApiService _apiService;
+    private readonly ILogger<ProfileViewModel> _logger;
 
-    public ProfileViewModel(IApiService apiService)
+    public ProfileViewModel(IApiService apiService, ILogger<ProfileViewModel> logger)
     {
         _apiService = apiService;
+        _logger = logger;
         _ = LoadProfileAsync();
         _ = LoadBadgesAsync();
     }
@@ -168,7 +171,7 @@ public partial class ProfileViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine($"[ProfileViewModel] Error cargando medallas: {ex.Message}");
+            _logger.LogError(ex, "Error cargando medallas");
         }
     }
 
