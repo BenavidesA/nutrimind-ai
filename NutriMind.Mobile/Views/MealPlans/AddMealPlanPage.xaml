@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="NutriMind.Mobile.Views.MealPlans.AddMealPlanPage"
+             BackgroundColor="{StaticResource SystemBackground}"
+             Title="{Binding PageTitle}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20,30,20,20" Spacing="25">
+
+            <Label Text="{Binding HeaderText}" FontSize="26" FontAttributes="Bold" TextColor="{StaticResource PrimaryText}"/>
+            <Label Text="Define el rango de fechas y las calorías objetivo por día." FontSize="15" TextColor="{StaticResource SecondaryText}" Margin="0,-15,0,0"/>
+
+            <Border StrokeShape="RoundRectangle 12" Stroke="Transparent" BackgroundColor="{StaticResource CardBackground}" Padding="20">
+                <VerticalStackLayout Spacing="15">
+
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="NOMBRE DEL PLAN" FontSize="12" FontAttributes="Bold" TextColor="{StaticResource SecondaryText}"/>
+                        <Border StrokeThickness="0" BackgroundColor="#F2F2F7" StrokeShape="RoundRectangle 10" Padding="15,0" HeightRequest="50">
+                            <Entry Text="{Binding Name}" Placeholder="Ej. Plan Semana 1" TextColor="Black" BackgroundColor="Transparent"/>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <BoxView HeightRequest="1" Color="{StaticResource SeparatorColor}" Margin="0,5"/>
+
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="FECHA INICIO" FontSize="12" FontAttributes="Bold" TextColor="{StaticResource SecondaryText}"/>
+                        <DatePicker Date="{Binding StartDate}" TextColor="Black"/>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="FECHA FIN" FontSize="12" FontAttributes="Bold" TextColor="{StaticResource SecondaryText}"/>
+                        <DatePicker Date="{Binding EndDate}" TextColor="Black"/>
+                    </VerticalStackLayout>
+
+                    <BoxView HeightRequest="1" Color="{StaticResource SeparatorColor}" Margin="0,5"/>
+
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="CALORÍAS POR DÍA" FontSize="12" FontAttributes="Bold" TextColor="{StaticResource SecondaryText}"/>
+                        <Border StrokeThickness="0" BackgroundColor="#F2F2F7" StrokeShape="RoundRectangle 10" Padding="15,0" HeightRequest="50">
+                            <Entry Text="{Binding Calories}" Keyboard="Numeric" Placeholder="Ej. 2000" TextColor="Black" BackgroundColor="Transparent"/>
+                        </Border>
+                    </VerticalStackLayout>
+
+                </VerticalStackLayout>
+            </Border>
+
+            <Button Text="Guardar Plan" Command="{Binding SaveCommand}" BackgroundColor="{StaticResource AppleGreen}" TextColor="White" FontAttributes="Bold" FontSize="16" CornerRadius="12" HeightRequest="55" Margin="0,10,0,0"/>
+            <Button Text="Cancelar" Command="{Binding CancelCommand}" BackgroundColor="Transparent" TextColor="{StaticResource DestructiveRed}" FontAttributes="Bold" FontSize="16"/>
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}" Color="{StaticResource AppleGreen}" HorizontalOptions="Center"/>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

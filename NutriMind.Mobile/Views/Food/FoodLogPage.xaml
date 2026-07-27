@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:NutriMind.Mobile.Models.Food"
+             xmlns:vm="clr-namespace:NutriMind.Mobile.ViewModels.Food"
+             x:Class="NutriMind.Mobile.Views.Food.FoodLogPage"
+             x:DataType="vm:FoodLogViewModel"
+             BackgroundColor="{StaticResource SystemBackground}"
+             Title="Registro de comidas">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="+" Command="{Binding GoToAddFoodCommand}" />
+    </ContentPage.ToolbarItems>
+
+    <Grid>
+        <RefreshView IsRefreshing="{Binding IsBusy}" Command="{Binding LoadFoodsCommand}">
+
+            <CollectionView ItemsSource="{Binding GroupedFoods}"
+                            IsGrouped="True"
+                            SelectionMode="None"
+                            Margin="20,20,20,0">
+
+                <CollectionView.GroupHeaderTemplate>
+                    <DataTemplate x:DataType="models:FoodGroup">
+                        <Label Text="{Binding MealTypeName}" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource PrimaryText}" Margin="4,16,4,8"/>
+                    </DataTemplate>
+                </CollectionView.GroupHeaderTemplate>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:FoodItemDto">
+
+                        <SwipeView>
+                            <SwipeView.RightItems>
+                                <SwipeItems>
+                                    <SwipeItem Text="Eliminar"
+                                               BackgroundColor="{StaticResource DestructiveRed}"
+                                               Command="{Binding Source={RelativeSource AncestorType={x:Type CollectionView}}, Path=BindingContext.DeleteFoodCommand}"
+                                               CommandParameter="{Binding .}">
+                                        <SwipeItem.IconImageSource>
+                                            <FontImageSource FontFamily="MaterialOutlined" Glyph="&#xe872;" Color="White" Size="24"/>
+                                        </SwipeItem.IconImageSource>
+                                    </SwipeItem>
+                                    <SwipeItem Text="Editar"
+                                               BackgroundColor="#5E5CE6"
+                                               Command="{Binding Source={RelativeSource AncestorType={x:Type CollectionView}}, Path=BindingContext.EditFoodCommand}"
+                                               CommandParameter="{Binding .}">
+                                        <SwipeItem.IconImageSource>
+                                            <FontImageSource FontFamily="MaterialOutlined" Glyph="&#xe150;" Color="White" Size="24"/>
+                                        </SwipeItem.IconImageSource>
+                                    </SwipeItem>
+                                </SwipeItems>
+                            </SwipeView.RightItems>
+
+                            <Border StrokeShape="RoundRectangle 12" 
+                                    Stroke="Transparent" 
+                                    BackgroundColor="{StaticResource CardBackground}"
+                                    Margin="0,0,0,15">
+
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:FoodLogViewModel}}, Path=ViewFoodDetailsCommand}"
+                                                          CommandParameter="{Binding .}" />
+                                </Border.GestureRecognizers>
+
+                                <Grid ColumnDefinitions="*, Auto" Padding="20">
+                                    <VerticalStackLayout Grid.Column="0" VerticalOptions="Center">
+                                        <Label Text="{Binding Name}" FontSize="17" FontAttributes="Bold" TextColor="{StaticResource PrimaryText}"/>
+                                        <Label Text="{Binding MacrosSummary}" FontSize="13" TextColor="{StaticResource SecondaryText}" Margin="0,4,0,0"/>
+                                    </VerticalStackLayout>
+                                    <Label Grid.Column="1" Text="›" FontSize="24" TextColor="{StaticResource SeparatorColor}" VerticalOptions="Center"/>
+                                </Grid>
+                            </Border>
+                        </SwipeView>
+
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+
+                <CollectionView.EmptyView>
+                    <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="10" Margin="0,100,0,0">
+                        <Label Text="No has registrado comidas hoy" FontSize="18" TextColor="{StaticResource SecondaryText}" HorizontalOptions="Center"/>
+                        <Label Text="Toca + para agregar una comida" FontSize="14" TextColor="{StaticResource SecondaryText}" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </CollectionView.EmptyView>
+
+            </CollectionView>
+        </RefreshView>
+    </Grid>
+</ContentPage>

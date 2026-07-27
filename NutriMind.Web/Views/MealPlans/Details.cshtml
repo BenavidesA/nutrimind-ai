@@ -1,0 +1,39 @@
+@using NutriMind.Web.Services.Dtos
+@model MealPlanResponseDto
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<div class="page-header">
+    <h1>@Model.Name @(Model.IsAIGenerated ? "✨" : "")</h1>
+    <div class="page-header-actions">
+        <a class="btn btn-primary btn-sm" asp-action="Edit" asp-route-id="@Model.Id">Editar</a>
+        <a class="btn-link" asp-action="Index">&larr; Volver a planes</a>
+    </div>
+</div>
+
+<div class="stat-grid">
+    <div class="stat-card stat-primary">
+        <span class="stat-value">@Model.TotalCaloriesPerDay.ToString("0")</span>
+        <span class="stat-label">Kcal / día</span>
+    </div>
+    <div class="stat-card">
+        <span class="stat-value">@((Model.EndDate.Date - Model.StartDate.Date).Days + 1)</span>
+        <span class="stat-label">Días</span>
+    </div>
+    <div class="stat-card">
+        <span class="stat-value">@Model.PlannedMeals.Count</span>
+        <span class="stat-label">Comidas planificadas</span>
+    </div>
+</div>
+
+<div class="card mt-3">
+    <h2>Vigencia</h2>
+    <p>@Model.StartDate.ToString("d 'de' MMMM 'de' yyyy") — @Model.EndDate.ToString("d 'de' MMMM 'de' yyyy")</p>
+</div>
+
+<form asp-action="Delete" method="post" onsubmit="return confirm('¿Eliminar este plan?');">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="id" value="@Model.Id" />
+    <button type="submit" class="btn btn-danger" style="width: auto; padding: 0 var(--space-3);">Eliminar plan</button>
+</form>

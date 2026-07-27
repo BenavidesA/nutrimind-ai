@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:NutriMind.Mobile.ViewModels.AI"
+             xmlns:models="clr-namespace:NutriMind.Mobile.Models.AI"
+             x:Class="NutriMind.Mobile.Views.AI.AIAssistantPage"
+             BackgroundColor="{StaticResource BgSecondary}"
+             Shell.NavBarIsVisible="False">
+
+    <Grid RowDefinitions="Auto, *, Auto">
+
+        <Grid Grid.Row="0" ColumnDefinitions="Auto, *, Auto" Padding="15,20,15,10" BackgroundColor="{StaticResource BgSecondary}">
+            <Button Grid.Column="0" Text="‹" BackgroundColor="Transparent" TextColor="#5E5CE6" FontSize="24" FontAttributes="Bold" Command="{Binding GoBackCommand}" Margin="-15,0,0,0"/>
+            <Label Grid.Column="1" Text="NutriMind AI" HorizontalOptions="Center" VerticalOptions="Center" FontAttributes="Bold" FontSize="18" TextColor="{StaticResource PrimaryText}"/>
+            <Button Grid.Column="2" Text="&#xe16c;" FontFamily="MaterialOutlined" BackgroundColor="Transparent" TextColor="{StaticResource DestructiveRed}" FontSize="20" Command="{Binding NewConversationCommand}" Margin="0,0,-15,0"/>
+        </Grid>
+
+        <ScrollView Grid.Row="1" Margin="0,0,0,10" VerticalScrollBarVisibility="Never">
+            <VerticalStackLayout Padding="0,20,0,20">
+
+                <Border StrokeThickness="0" StrokeShape="RoundRectangle 16" Padding="20" Margin="20,0,20,20"
+                        BackgroundColor="{StaticResource BgCard}"
+                        IsVisible="False">
+                    <Border.Triggers>
+                        <DataTrigger TargetType="Border" Binding="{Binding Messages.Count}" Value="0">
+                            <Setter Property="IsVisible" Value="True" />
+                        </DataTrigger>
+                    </Border.Triggers>
+
+                    <VerticalStackLayout Spacing="8">
+                        <HorizontalStackLayout Spacing="8">
+                            <Image Source="logo.png" WidthRequest="24" HeightRequest="24" VerticalOptions="Center"/>
+                            <Label Text="NutriMind AI" FontSize="17" FontFamily="SFProSemibold" TextColor="{StaticResource TextPrimary}" VerticalOptions="Center"/>
+                        </HorizontalStackLayout>
+                        <Label Text="Hola, soy tu asistente nutricional. ¿En qué puedo ayudarte hoy?" FontSize="15" TextColor="{StaticResource TextSecondary}" LineBreakMode="WordWrap"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never" Margin="0,0,0,20" IsVisible="False">
+                    <ScrollView.Triggers>
+                        <DataTrigger TargetType="ScrollView" Binding="{Binding Messages.Count}" Value="0">
+                            <Setter Property="IsVisible" Value="True" />
+                        </DataTrigger>
+                    </ScrollView.Triggers>
+
+                    <HorizontalStackLayout Spacing="8" Padding="20,0" BindableLayout.ItemsSource="{Binding SuggestionChips}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <Border BackgroundColor="#F2F2F2"
+                                        StrokeThickness="0" StrokeShape="RoundRectangle 22" HeightRequest="44" Padding="16,0" VerticalOptions="Center">
+                                    <Label Text="{Binding .}" FontSize="15" VerticalOptions="Center" TextColor="{StaticResource TextPrimary}"/>
+                                    <Border.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:AIAssistantViewModel}}, Path=SendSuggestionCommand}" CommandParameter="{Binding .}" />
+                                    </Border.GestureRecognizers>
+                                </Border>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </HorizontalStackLayout>
+                </ScrollView>
+
+                <CollectionView ItemsSource="{Binding Messages}" 
+                                ItemsUpdatingScrollMode="KeepLastItemInView"
+                                SelectionMode="None">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <ContentView Padding="20,4">
+                                <VerticalStackLayout>
+                                    <Border IsVisible="{Binding IsUser}" 
+                                            BackgroundColor="{StaticResource PrimaryBlue}" 
+                                            HorizontalOptions="End" StrokeThickness="0" 
+                                            StrokeShape="RoundRectangle 18,18,4,18" Padding="14,10" MaximumWidthRequest="280">
+                                        <Label Text="{Binding Content}" TextColor="White" FontSize="16" LineBreakMode="WordWrap" />
+                                    </Border>
+
+                                    <Border IsVisible="{Binding IsAssistant}"
+                                            BackgroundColor="{StaticResource BgCard}"
+                                            HorizontalOptions="Start" StrokeThickness="0"
+                                            StrokeShape="RoundRectangle 18,18,18,4" Padding="14,10" MaximumWidthRequest="280">
+                                        <Label Text="{Binding Content}" TextColor="{StaticResource TextPrimary}" FontSize="16" LineBreakMode="WordWrap" />
+                                    </Border>
+                                </VerticalStackLayout>
+                            </ContentView>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <HorizontalStackLayout IsVisible="{Binding IsTyping}" Spacing="4" Margin="30,10,0,10">
+                    <Label Text="NutriMind está escribiendo..." FontSize="13" TextColor="{StaticResource TextTertiary}" FontAttributes="Italic"/>
+                </HorizontalStackLayout>
+                
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <Border Grid.Row="2" BackgroundColor="{StaticResource BgCard}"
+                StrokeThickness="1" Stroke="#33C6C6C8" StrokeShape="Rectangle 0" Padding="20,10,20,30">
+            <Grid ColumnDefinitions="*, Auto" ColumnSpacing="10">
+                <Border Grid.Column="0" BackgroundColor="{StaticResource BgSecondary}"
+                        StrokeThickness="0" StrokeShape="RoundRectangle 20" HeightRequest="40" Padding="15,0">
+                    <Entry Text="{Binding CurrentMessage}" Placeholder="Mensaje..." TextColor="{StaticResource TextPrimary}" 
+                           PlaceholderColor="{StaticResource TextTertiary}" BackgroundColor="Transparent" 
+                           ReturnCommand="{Binding SendMessageCommand}" />
+                </Border>
+                <Button Grid.Column="1" Text="Enviar" BackgroundColor="{StaticResource PrimaryBlue}" TextColor="White" 
+                        FontFamily="SFProSemibold" CornerRadius="20" HeightRequest="40" Padding="15,0"
+                        Command="{Binding SendMessageCommand}" />
+            </Grid>
+        </Border>
+
+    </Grid>
+</ContentPage>

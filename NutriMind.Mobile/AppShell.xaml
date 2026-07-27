@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:auth="clr-namespace:NutriMind.Mobile.Views.Auth"
+    xmlns:home="clr-namespace:NutriMind.Mobile.Views.Home"
+    xmlns:food="clr-namespace:NutriMind.Mobile.Views.Food"
+    xmlns:ai="clr-namespace:NutriMind.Mobile.Views.AI"
+    x:Class="NutriMind.Mobile.AppShell"
+    Shell.FlyoutBehavior="Disabled">
+
+    <ShellContent Route="login" ContentTemplate="{DataTemplate auth:LoginPage}" Shell.NavBarIsVisible="False" />
+    <ShellContent Route="home" ContentTemplate="{DataTemplate home:HomePage}" Shell.NavBarIsVisible="False" />
+    <ShellContent Route="foodlog" ContentTemplate="{DataTemplate food:FoodLogPage}" Shell.NavBarIsVisible="True" Title="Food Log" />
+    <ShellContent Route="aiassistant" ContentTemplate="{DataTemplate ai:AIAssistantPage}" Shell.NavBarIsVisible="True" Title="Nutrition AI" />
+
+</Shell>

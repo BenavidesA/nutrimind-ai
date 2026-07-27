@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:NutriMind.Mobile.ViewModels.History"
+             xmlns:models="clr-namespace:NutriMind.Mobile.Models.Dashboard"
+             xmlns:microcharts="clr-namespace:Microcharts.Maui;assembly=Microcharts.Maui"
+             x:Class="NutriMind.Mobile.Views.History.HistoryPage"
+             x:DataType="vm:HistoryViewModel"
+             Title="Progreso"
+             BackgroundColor="{AppThemeBinding Light={StaticResource BgSecondary}, Dark={StaticResource BgSecondaryDark}}"
+             Shell.NavBarHasShadow="False">
+
+    <AbsoluteLayout>
+        <ScrollView AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All">
+            <VerticalStackLayout Padding="20,16,20,32" Spacing="0">
+
+                <Border BackgroundColor="{AppThemeBinding Light={StaticResource BgSecondary}, Dark={StaticResource BgSecondaryDark}}"
+                        StrokeThickness="1" Stroke="{StaticResource Separator}" StrokeShape="RoundRectangle 10"
+                        Padding="2" HeightRequest="40" Margin="0,0,0,28">
+                    <Grid ColumnDefinitions="*,*,*">
+                        <Border Grid.Column="0" StrokeThickness="0" StrokeShape="RoundRectangle 8" BackgroundColor="Transparent">
+                            <Border.Triggers>
+                                <DataTrigger TargetType="Border" Binding="{Binding IsWeekSelected}" Value="True">
+                                    <Setter Property="BackgroundColor" Value="{StaticResource BgCard}"/>
+                                </DataTrigger>
+                            </Border.Triggers>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding SelectPeriodCommand}" CommandParameter="week" />
+                            </Border.GestureRecognizers>
+                            <Label Text="Semana" HorizontalOptions="Center" VerticalOptions="Center" TextColor="{StaticResource TextSecondary}">
+                                <Label.Triggers>
+                                    <DataTrigger TargetType="Label" Binding="{Binding IsWeekSelected}" Value="True">
+                                        <Setter Property="TextColor" Value="{StaticResource PrimaryBlue}"/>
+                                        <Setter Property="FontAttributes" Value="Bold"/>
+                                    </DataTrigger>
+                                </Label.Triggers>
+                            </Label>
+                        </Border>
+                        <Border Grid.Column="1" StrokeThickness="0" StrokeShape="RoundRectangle 8" BackgroundColor="Transparent">
+                            <Border.Triggers>
+                                <DataTrigger TargetType="Border" Binding="{Binding IsMonthSelected}" Value="True">
+                                    <Setter Property="BackgroundColor" Value="{StaticResource BgCard}"/>
+                                </DataTrigger>
+                            </Border.Triggers>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding SelectPeriodCommand}" CommandParameter="month" />
+                            </Border.GestureRecognizers>
+                            <Label Text="Mes" HorizontalOptions="Center" VerticalOptions="Center" TextColor="{StaticResource TextSecondary}">
+                                <Label.Triggers>
+                                    <DataTrigger TargetType="Label" Binding="{Binding IsMonthSelected}" Value="True">
+                                        <Setter Property="TextColor" Value="{StaticResource PrimaryBlue}"/>
+                                        <Setter Property="FontAttributes" Value="Bold"/>
+                                    </DataTrigger>
+                                </Label.Triggers>
+                            </Label>
+                        </Border>
+                        <Border Grid.Column="2" StrokeThickness="0" StrokeShape="RoundRectangle 8" BackgroundColor="Transparent">
+                            <Border.Triggers>
+                                <DataTrigger TargetType="Border" Binding="{Binding Is3MonthsSelected}" Value="True">
+                                    <Setter Property="BackgroundColor" Value="{StaticResource BgCard}"/>
+                                </DataTrigger>
+                            </Border.Triggers>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding SelectPeriodCommand}" CommandParameter="3months" />
+                            </Border.GestureRecognizers>
+                            <Label Text="3 Meses" HorizontalOptions="Center" VerticalOptions="Center" TextColor="{StaticResource TextSecondary}">
+                                <Label.Triggers>
+                                    <DataTrigger TargetType="Label" Binding="{Binding Is3MonthsSelected}" Value="True">
+                                        <Setter Property="TextColor" Value="{StaticResource PrimaryBlue}"/>
+                                        <Setter Property="FontAttributes" Value="Bold"/>
+                                    </DataTrigger>
+                                </Label.Triggers>
+                            </Label>
+                        </Border>
+                    </Grid>
+                </Border>
+
+                <Label Text="CALORÍAS DIARIAS" FontFamily="SFProSemibold" FontSize="13" TextColor="{StaticResource TextSecondary}" Margin="4,0,0,8" />
+                <Border BackgroundColor="{AppThemeBinding Light={StaticResource BgCard}, Dark={StaticResource BgCardDark}}"
+                        StrokeThickness="0" StrokeShape="RoundRectangle 16" Padding="16" Margin="0,0,0,28">
+                    <microcharts:ChartView Chart="{Binding CaloriesBarChart}" HeightRequest="200" BackgroundColor="Transparent" />
+                </Border>
+
+                <Label Text="DISTRIBUCIÓN DE MACROS" FontFamily="SFProSemibold" FontSize="13" TextColor="{StaticResource TextSecondary}" Margin="4,0,0,8" />
+                <Border BackgroundColor="{AppThemeBinding Light={StaticResource BgCard}, Dark={StaticResource BgCardDark}}"
+                        StrokeThickness="0" StrokeShape="RoundRectangle 16" Padding="16" Margin="0,0,0,28">
+                    <Grid ColumnDefinitions="*, *">
+                        <microcharts:ChartView Grid.Column="0" Chart="{Binding MacrosDonutChart}" HeightRequest="150" BackgroundColor="Transparent" />
+                        <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="10" Margin="20,0,0,0">
+                            <Label Text="{Binding ProteinPercentLabel}" TextColor="{StaticResource ColorProtein}" FontSize="15" FontAttributes="Bold"/>
+                            <Label Text="{Binding CarbsPercentLabel}" TextColor="{StaticResource ColorCarbs}" FontSize="15" FontAttributes="Bold"/>
+                            <Label Text="{Binding FatPercentLabel}" TextColor="{StaticResource ColorFat}" FontSize="15" FontAttributes="Bold"/>
+                        </VerticalStackLayout>
+                    </Grid>
+                </Border>
+
+                <Label Text="RESUMEN DEL PERÍODO" FontFamily="SFProSemibold" FontSize="13" TextColor="{StaticResource TextSecondary}" Margin="4,0,0,8" />
+                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="12" Margin="0,0,0,28">
+                    <Border Grid.Column="0" BackgroundColor="{AppThemeBinding Light={StaticResource BgCard}, Dark={StaticResource BgCardDark}}" StrokeThickness="0" StrokeShape="RoundRectangle 12" Padding="12">
+                        <VerticalStackLayout>
+                            <Label Text="Promedio" FontSize="13" TextColor="{StaticResource TextSecondary}" HorizontalOptions="Center"/>
+                            <Label Text="{Binding AverageCalories}" FontSize="15" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" HorizontalOptions="Center" Margin="0,4,0,0"/>
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Grid.Column="1" BackgroundColor="{AppThemeBinding Light={StaticResource BgCard}, Dark={StaticResource BgCardDark}}" StrokeThickness="0" StrokeShape="RoundRectangle 12" Padding="12">
+                        <VerticalStackLayout>
+                            <Label Text="Mejor Día" FontSize="13" TextColor="{StaticResource TextSecondary}" HorizontalOptions="Center"/>
+                            <Label Text="{Binding BestCalories}" FontSize="15" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" HorizontalOptions="Center" Margin="0,4,0,0"/>
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Grid.Column="2" BackgroundColor="{AppThemeBinding Light={StaticResource BgCard}, Dark={StaticResource BgCardDark}}" StrokeThickness="0" StrokeShape="RoundRectangle 12" Padding="12">
+                        <VerticalStackLayout>
+                            <Label Text="Días Meta" FontSize="13" TextColor="{StaticResource TextSecondary}" HorizontalOptions="Center"/>
+                            <Label Text="{Binding GoalDaysAchieved}" FontSize="15" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" HorizontalOptions="Center" Margin="0,4,0,0"/>
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
+
+                <Label Text="REGISTRO DIARIO" FontFamily="SFProSemibold" FontSize="13" TextColor="{StaticResource TextSecondary}" Margin="4,0,0,8" />
+                <Border BackgroundColor="{AppThemeBinding Light={StaticResource BgCard}, Dark={StaticResource BgCardDark}}" StrokeThickness="0" StrokeShape="RoundRectangle 12" Padding="0">
+                    <StackLayout BindableLayout.ItemsSource="{Binding DailySummaries}" Spacing="0">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="models:DailySummaryDto">
+                                <StackLayout>
+                                    <Grid Padding="16,14" ColumnDefinitions="Auto, *, Auto">
+                                        <Label Grid.Column="0" Text="{Binding DayLabel}" FontSize="17" TextColor="{StaticResource TextPrimary}" WidthRequest="50"/>
+                                        <Label Grid.Column="1" Text="●" FontSize="17" TextColor="{StaticResource PrimaryBlue}" HorizontalOptions="Start"/>
+                                        <Label Grid.Column="2" Text="{Binding TotalCalories, StringFormat='{0:F0} kcal'}" FontSize="17" TextColor="{StaticResource TextSecondary}"/>
+                                    </Grid>
+                                    <BoxView HeightRequest="0.5" Color="{StaticResource Separator}" Margin="16,0,0,0" />
+                                </StackLayout>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </StackLayout>
+                </Border>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <ActivityIndicator AbsoluteLayout.LayoutBounds="0.5,0.5,AutoSize,AutoSize" AbsoluteLayout.LayoutFlags="PositionProportional"
+                           IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" Color="{StaticResource PrimaryBlue}" />
+    </AbsoluteLayout>
+</ContentPage>

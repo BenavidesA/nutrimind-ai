@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="NutriMind.Mobile.Views.Food.FoodDetailPage"
+             BackgroundColor="{StaticResource SystemBackground}"
+             Shell.NavBarIsVisible="False">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20,50,20,20" Spacing="30">
+
+            <Grid ColumnDefinitions="Auto, *">
+                <Button Grid.Column="0" Text="‹ Atrás" BackgroundColor="Transparent" TextColor="#5E5CE6" FontSize="18" Command="{Binding GoBackCommand}" Margin="-15,0,0,0"/>
+            </Grid>
+
+            <Label Text="{Binding Food.Name}" FontSize="34" FontAttributes="Bold" TextColor="{StaticResource PrimaryText}" />
+            <Label Text="INFORMACIÓN NUTRICIONAL" FontSize="13" FontAttributes="Bold" TextColor="{StaticResource SecondaryText}" Margin="0,-20,0,0"/>
+
+            <Border StrokeShape="RoundRectangle 20" Stroke="Transparent" BackgroundColor="{StaticResource CardBackground}" Padding="30">
+                <VerticalStackLayout HorizontalOptions="Center" Spacing="5">
+                    <Label Text="🔥 Calorías Totales" FontSize="16" TextColor="{StaticResource SecondaryText}" HorizontalOptions="Center"/>
+                    <Label Text="{Binding Food.Calories}" FontSize="60" FontAttributes="Bold" TextColor="{StaticResource AppleGreen}" HorizontalOptions="Center"/>
+                    <Label Text="KCAL" FontSize="14" FontAttributes="Bold" TextColor="{StaticResource SecondaryText}" HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+            </Border>
+
+            <Grid ColumnDefinitions="*, *" RowDefinitions="Auto, Auto" ColumnSpacing="15" RowSpacing="15">
+
+                <Border Grid.Column="0" StrokeShape="RoundRectangle 20" Stroke="Transparent" BackgroundColor="{StaticResource CardBackground}" Padding="20">
+                    <VerticalStackLayout HorizontalOptions="Center" Spacing="5">
+                        <Label Text="Carbohidratos" FontSize="14" TextColor="{StaticResource SecondaryText}" HorizontalOptions="Center"/>
+                        <Label Text="{Binding Food.Carbs, StringFormat='{0}g'}" FontSize="28" FontAttributes="Bold" TextColor="#FF9F0A" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border Grid.Column="1" StrokeShape="RoundRectangle 20" Stroke="Transparent" BackgroundColor="{StaticResource CardBackground}" Padding="20">
+                    <VerticalStackLayout HorizontalOptions="Center" Spacing="5">
+                        <Label Text="Proteínas" FontSize="14" TextColor="{StaticResource SecondaryText}" HorizontalOptions="Center"/>
+                        <Label Text="{Binding Food.Protein, StringFormat='{0}g'}" FontSize="28" FontAttributes="Bold" TextColor="#5E5CE6" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border Grid.Row="1" Grid.Column="0" StrokeShape="RoundRectangle 20" Stroke="Transparent" BackgroundColor="{StaticResource CardBackground}" Padding="20">
+                    <VerticalStackLayout HorizontalOptions="Center" Spacing="5">
+                        <Label Text="Grasas" FontSize="14" TextColor="{StaticResource SecondaryText}" HorizontalOptions="Center"/>
+                        <Label Text="{Binding Food.Fat, StringFormat='{0}g'}" FontSize="28" FontAttributes="Bold" TextColor="#FF3B30" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border Grid.Row="1" Grid.Column="1" StrokeShape="RoundRectangle 20" Stroke="Transparent" BackgroundColor="{StaticResource CardBackground}" Padding="20">
+                    <VerticalStackLayout HorizontalOptions="Center" Spacing="5">
+                        <Label Text="Cantidad" FontSize="14" TextColor="{StaticResource SecondaryText}" HorizontalOptions="Center"/>
+                        <Label Text="{Binding Food.ServingSizeG, StringFormat='{0}g'}" FontSize="28" FontAttributes="Bold" TextColor="{StaticResource PrimaryText}" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </Border>
+
+            </Grid>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

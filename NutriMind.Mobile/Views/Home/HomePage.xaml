@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:microcharts="clr-namespace:Microcharts.Maui;assembly=Microcharts.Maui"
+    x:Class="NutriMind.Mobile.Views.Home.HomePage"
+    BackgroundColor="{StaticResource SystemBackground}"
+    Title="Home">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20,50,20,20" Spacing="25">
+
+            <Grid ColumnDefinitions="*, Auto">
+                <VerticalStackLayout Grid.Column="0">
+                    <Label Text="Resumen" FontSize="34" TextColor="{StaticResource PrimaryText}" FontAttributes="Bold" FontFamily="OpenSansSemibold"/>
+                    <Label Text="{Binding TodayLabel}" FontSize="13" TextColor="{StaticResource SecondaryText}" FontAttributes="Bold" Margin="0,5,0,0"/>
+                </VerticalStackLayout>
+
+                <Frame Grid.Column="1" WidthRequest="40" HeightRequest="40" CornerRadius="20" Padding="0" HasShadow="False" BackgroundColor="#5E5CE6" VerticalOptions="Start">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding GoToProfileCommand}" />
+                    </Frame.GestureRecognizers>
+                    <Label Text="{Binding UserInitials}" HorizontalOptions="Center" VerticalOptions="Center" TextColor="White" FontAttributes="Bold" FontSize="16"/>
+                </Frame>
+            </Grid>
+
+            <Border StrokeShape="RoundRectangle 12" Stroke="Transparent" BackgroundColor="{StaticResource CardBackground}">
+                <Grid ColumnDefinitions="*, *" Padding="20">
+
+                    <VerticalStackLayout Grid.Column="0" HorizontalOptions="Center" Spacing="4">
+                        <Label Text="{Binding Streak}" FontSize="28" TextColor="#FF9F0A" FontAttributes="Bold"/>
+                        <Label Text="DÍAS SEGUIDOS 🔥" FontSize="11" TextColor="{StaticResource SecondaryText}" FontAttributes="Bold"/>
+                    </VerticalStackLayout>
+
+                    <BoxView WidthRequest="1" Color="{StaticResource SeparatorColor}" HorizontalOptions="End" VerticalOptions="Fill"/>
+
+                    <VerticalStackLayout Grid.Column="1" HorizontalOptions="Center" Spacing="4">
+                        <Label Text="{Binding Points}" FontSize="28" TextColor="#5E5CE6" FontAttributes="Bold"/>
+                        <Label Text="PUNTOS TOTALES 🌟" FontSize="11" TextColor="{StaticResource SecondaryText}" FontAttributes="Bold"/>
+                    </VerticalStackLayout>
+
+                </Grid>
+            </Border>
+
+            <Border StrokeShape="RoundRectangle 12" Stroke="Transparent" BackgroundColor="{StaticResource CardBackground}">
+                <Grid RowDefinitions="Auto, Auto" ColumnDefinitions="*, *, *" Padding="20">
+
+                    <VerticalStackLayout Grid.Row="1" Grid.Column="0" HorizontalOptions="Center" Spacing="4">
+                        <Label Text="{Binding Kcal}" FontSize="24" TextColor="{StaticResource AppleGreen}" FontAttributes="Bold"/>
+                        <Label Text="KCAL" FontSize="12" TextColor="{StaticResource SecondaryText}" FontAttributes="Bold"/>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Grid.Row="1" Grid.Column="1" HorizontalOptions="Center" Spacing="4">
+                        <Label Text="{Binding Carbs}" FontSize="24" TextColor="{StaticResource PrimaryText}" FontAttributes="Bold"/>
+                        <Label Text="CARBOHIDRATOS" FontSize="12" TextColor="{StaticResource SecondaryText}" FontAttributes="Bold"/>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Grid.Row="1" Grid.Column="2" HorizontalOptions="Center" Spacing="4">
+                        <Label Text="{Binding Protein}" FontSize="24" TextColor="{StaticResource PrimaryText}" FontAttributes="Bold"/>
+                        <Label Text="PROTEÍNA" FontSize="12" TextColor="{StaticResource SecondaryText}" FontAttributes="Bold"/>
+                    </VerticalStackLayout>
+                </Grid>
+            </Border>
+
+            <Border StrokeShape="RoundRectangle 12" Stroke="Transparent" BackgroundColor="{StaticResource CardBackground}">
+                <VerticalStackLayout Padding="20" Spacing="10">
+                    <Label Text="DISTRIBUCIÓN DE MACROS" FontSize="12" TextColor="{StaticResource SecondaryText}" FontAttributes="Bold"/>
+                    <Grid ColumnDefinitions="*, *">
+                        <microcharts:ChartView Grid.Column="0" Chart="{Binding MacrosChart}" HeightRequest="150" BackgroundColor="Transparent"/>
+                        <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="10" Margin="20,0,0,0">
+                            <Label Text="{Binding Carbs, StringFormat='● Carbohidratos {0}'}" TextColor="{StaticResource ColorCarbs}" FontSize="15" FontAttributes="Bold"/>
+                            <Label Text="{Binding Protein, StringFormat='● Proteína {0}'}" TextColor="{StaticResource ColorProtein}" FontSize="15" FontAttributes="Bold"/>
+                            <Label Text="{Binding Fat, StringFormat='● Grasas {0}'}" TextColor="{StaticResource ColorFat}" FontSize="15" FontAttributes="Bold"/>
+                        </VerticalStackLayout>
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <Label Text="Ranking" FontSize="22" FontFamily="OpenSansSemibold" TextColor="{StaticResource PrimaryText}" Margin="0,10,0,0"/>
+
+            <Border StrokeShape="RoundRectangle 12" Stroke="Transparent" BackgroundColor="{StaticResource CardBackground}">
+                <StackLayout BindableLayout.ItemsSource="{Binding Ranking}" Spacing="0">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate>
+                            <StackLayout>
+                                <Grid ColumnDefinitions="30, *, Auto" Padding="15,12">
+                                    <Grid.Triggers>
+                                        <DataTrigger TargetType="Grid" Binding="{Binding IsCurrentUser}" Value="True">
+                                            <Setter Property="BackgroundColor" Value="#E8F8ED"/>
+                                        </DataTrigger>
+                                    </Grid.Triggers>
+                                    <Label Grid.Column="0" Text="{Binding Rank}" FontSize="15" FontAttributes="Bold" TextColor="{StaticResource SecondaryText}" VerticalOptions="Center"/>
+                                    <Label Grid.Column="1" Text="{Binding Name}" FontSize="16" TextColor="{StaticResource PrimaryText}" VerticalOptions="Center" Margin="10,0,0,0"/>
+                                    <Label Grid.Column="2" Text="{Binding TotalPoints, StringFormat='{0} pts'}" FontSize="15" FontAttributes="Bold" TextColor="#5E5CE6" VerticalOptions="Center"/>
+                                </Grid>
+                                <BoxView HeightRequest="1" Color="{StaticResource SeparatorColor}" Margin="15,0,0,0"/>
+                            </StackLayout>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </StackLayout>
+            </Border>
+
+            <Label Text="Apps" FontSize="22" FontFamily="OpenSansSemibold" TextColor="{StaticResource PrimaryText}" Margin="0,10,0,0"/>
+
+            <Border StrokeShape="RoundRectangle 12" Stroke="Transparent" BackgroundColor="{StaticResource CardBackground}">
+                <VerticalStackLayout>
+
+                    <Grid ColumnDefinitions="40, *, 30" Padding="15" HeightRequest="60">
+                        <Label Grid.Column="0" Text="&#xe56c;" FontFamily="MaterialOutlined" FontSize="24" TextColor="{StaticResource AppleGreen}" HorizontalOptions="Start" VerticalOptions="Center"/>
+                        <Label Grid.Column="1" Text="Registro de comidas" FontSize="17" VerticalOptions="Center" TextColor="{StaticResource PrimaryText}"/>
+                        <Label Grid.Column="2" Text="›" FontSize="24" TextColor="{StaticResource SecondaryText}" VerticalOptions="Center" HorizontalOptions="End"/>
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding GoToFoodLogCommand}" />
+                        </Grid.GestureRecognizers>
+                    </Grid>
+
+                    <BoxView HeightRequest="1" Color="{StaticResource SeparatorColor}" Margin="55,0,0,0"/>
+
+                    <Grid ColumnDefinitions="40, *, 30" Padding="15" HeightRequest="60">
+                        <Label Grid.Column="0" Text="&#xea4a;" FontFamily="MaterialOutlined" FontSize="24" TextColor="#5E5CE6" HorizontalOptions="Start" VerticalOptions="Center"/>
+                        <Label Grid.Column="1" Text="IA de Nutrición" FontSize="17" VerticalOptions="Center" TextColor="{StaticResource PrimaryText}"/>
+                        <Label Grid.Column="2" Text="›" FontSize="24" TextColor="{StaticResource SecondaryText}" VerticalOptions="Center" HorizontalOptions="End"/>
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding GoToAIAssistantCommand}" />
+                        </Grid.GestureRecognizers>
+                    </Grid>
+
+                    <BoxView HeightRequest="1" Color="{StaticResource SeparatorColor}" Margin="55,0,0,0"/>
+
+                    <Grid ColumnDefinitions="40, *, 30" Padding="15" HeightRequest="60">
+                        <Label Grid.Column="0" Text="&#xebcc;" FontFamily="MaterialOutlined" FontSize="24" TextColor="#AF52DE" HorizontalOptions="Start" VerticalOptions="Center"/>
+                        <Label Grid.Column="1" Text="Planes de alimentación" FontSize="17" VerticalOptions="Center" TextColor="{StaticResource PrimaryText}"/>
+                        <Label Grid.Column="2" Text="›" FontSize="24" TextColor="{StaticResource SecondaryText}" VerticalOptions="Center" HorizontalOptions="End"/>
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding GoToMealPlansCommand}" />
+                        </Grid.GestureRecognizers>
+                    </Grid>
+
+                    <BoxView HeightRequest="1" Color="{StaticResource SeparatorColor}" Margin="55,0,0,0"/>
+                    <Grid ColumnDefinitions="40, *, 30" Padding="15" HeightRequest="60" IsVisible="False">
+                        <BoxView Grid.Column="0" Color="#FF9F0A" CornerRadius="8" WidthRequest="30" HeightRequest="30" HorizontalOptions="Start" VerticalOptions="Center"/>
+                        <Label Grid.Column="1" Text="History &amp; Data" FontSize="17" VerticalOptions="Center" TextColor="{StaticResource PrimaryText}"/>
+                        <Label Grid.Column="2" Text="›" FontSize="24" TextColor="{StaticResource SecondaryText}" VerticalOptions="Center" HorizontalOptions="End"/>
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding GoToHistoryCommand}" />
+                        </Grid.GestureRecognizers>
+                    </Grid>
+
+                </VerticalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

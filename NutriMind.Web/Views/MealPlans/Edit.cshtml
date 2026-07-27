@@ -1,0 +1,50 @@
+@model EditMealPlanViewModel
+@{
+    ViewData["Title"] = "Editar plan de alimentación";
+}
+
+<div class="page-header">
+    <h1>Editar plan</h1>
+</div>
+
+<div class="card" style="max-width: 480px;">
+    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <div class="alert alert-error">@Model.ErrorMessage</div>
+    }
+
+    <form asp-action="Edit" method="post" data-validate novalidate>
+        @Html.AntiForgeryToken()
+        <input asp-for="Id" type="hidden" />
+
+        <div class="form-group">
+            <label class="form-label" asp-for="Name"></label>
+            <input asp-for="Name" class="form-input" required autofocus />
+            <span asp-validation-for="Name" class="field-validation-error"></span>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label" asp-for="StartDate"></label>
+            <input asp-for="StartDate" class="form-input" type="date" required />
+            <span asp-validation-for="StartDate" class="field-validation-error"></span>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label" asp-for="EndDate"></label>
+            <input asp-for="EndDate" class="form-input" type="date" required />
+            <span asp-validation-for="EndDate" class="field-validation-error"></span>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label" asp-for="TotalCaloriesPerDay"></label>
+            <input asp-for="TotalCaloriesPerDay" class="form-input" type="number" step="1" min="1" required />
+            <span asp-validation-for="TotalCaloriesPerDay" class="field-validation-error"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-2">Guardar cambios</button>
+    </form>
+
+    <div class="text-center mt-3">
+        <a class="btn-link" asp-action="Details" asp-route-id="@Model.Id">Cancelar</a>
+    </div>
+</div>

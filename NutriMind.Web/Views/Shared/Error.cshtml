@@ -1,0 +1,18 @@
+@model ErrorViewModel
+@{
+    ViewData["Title"] = "Error";
+}
+
+<div class="auth-page">
+    <div class="auth-card text-center">
+        <h1>Ocurrió un error</h1>
+        <p>No pudimos procesar tu solicitud. Intenta de nuevo en unos minutos.</p>
+
+        @if (Model.ShowRequestId)
+        {
+            <p><strong>ID de solicitud:</strong> <code>@Model.RequestId</code></p>
+        }
+
+        <a class="btn-link" asp-controller="Auth" asp-action="Login">Volver al inicio de sesión</a>
+    </div>
+</div>

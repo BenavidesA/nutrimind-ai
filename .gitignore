@@ -1,0 +1,68 @@
+## .NET / Visual Studio
+bin/
+obj/
+*.user
+*.suo
+.vs/
+*.userosscache
+*.sln.docstates
+
+## MAUI específico
+*.apk
+*.aab
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+## Resultados de compilación
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+
+## Archivos de usuario / IDE
+*.rsuser
+*.userprefs
+.idea/
+*.iml
+*.DotSettings.user
+
+## Android / Gradle (build nativo de MAUI para la plataforma Android)
+local.properties
+.gradle/
+/build
+*/build/
+
+## NuGet
+*.nupkg
+**/[Pp]ackages/*
+!**/[Pp]ackages/build/
+
+## Node (usado por herramientas de compilación web/pptx si aplica)
+node_modules/
+
+## Archivos temporales del sistema
+Thumbs.db
+.DS_Store
+
+## Logs
+*.log
+
+## Secretos y configuración local (usar user-secrets / variables de entorno en su lugar)
+appsettings.Local.json
+appsettings.*.local.json
+*.pfx
+*.pem
+.env
+.env.*
+
+## Herramientas de IA locales (configuración de asistentes de código, no forma parte del proyecto)
+.claude/
+.cursor/
+.windsurf/
+.aider*

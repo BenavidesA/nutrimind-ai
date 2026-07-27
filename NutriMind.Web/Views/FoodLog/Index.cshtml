@@ -1,0 +1,71 @@
+@model FoodLogListViewModel
+@{
+    ViewData["Title"] = "Registro de comidas";
+    var prevDate = Model.Date.AddDays(-1).ToString("yyyy-MM-dd");
+    var nextDate = Model.Date.AddDays(1).ToString("yyyy-MM-dd");
+}
+
+<div class="page-header">
+    <h1>Registro de comidas</h1>
+    <div class="page-header-actions">
+        <a class="btn btn-primary btn-sm" asp-action="Add" asp-route-date="@Model.Date.ToString("yyyy-MM-dd")">+ Agregar alimento</a>
+    </div>
+</div>
+
+@if (!string.IsNullOrEmpty(Model.ErrorMessage))
+{
+    <div class="alert alert-error">@Model.ErrorMessage</div>
+}
+
+<div class="page-header">
+    <a class="btn-link" asp-action="Index" asp-route-date="@prevDate">&larr; Día anterior</a>
+    <h3 style="margin:0;">@Model.Date.ToString("dddd, d 'de' MMMM", new System.Globalization.CultureInfo("es-EC"))</h3>
+    <a class="btn-link" asp-action="Index" asp-route-date="@nextDate">Día siguiente &rarr;</a>
+</div>
+
+<div class="stat-grid mt-2">
+    <div class="stat-card stat-primary">
+        <span class="stat-value">@Model.TotalCalories.ToString("0")</span>
+        <span class="stat-label">Kcal</span>
+    </div>
+    <div class="stat-card">
+        <span class="stat-value">@Model.TotalProtein.ToString("0")g</span>
+        <span class="stat-label">Proteína</span>
+    </div>
+    <div class="stat-card">
+        <span class="stat-value">@Model.TotalCarbs.ToString("0")g</span>
+        <span class="stat-label">Carbos</span>
+    </div>
+    <div class="stat-card">
+        <span class="stat-value">@Model.TotalFat.ToString("0")g</span>
+        <span class="stat-label">Grasa</span>
+    </div>
+</div>
+
+<div class="item-list mt-3">
+    @if (!Model.Logs.Any())
+    {
+        <div class="empty-state">No hay comidas registradas este día.</div>
+    }
+    else
+    {
+        @foreach (var log in Model.Logs.OrderBy(l => l.LogDate))
+        {
+            <div class="list-item">
+                <div class="list-item-main">
+                    <span class="list-item-title">@log.FoodName</span>
+                    <span class="list-item-subtitle">@log.MealTypeName · @log.QuantityG.ToString("0")g · @log.Calories.ToString("0") kcal</span>
+                </div>
+                <div class="list-item-actions">
+                    <a class="btn-icon" title="Editar" asp-action="Edit" asp-route-id="@log.Id" asp-route-date="@Model.Date.ToString("yyyy-MM-dd")">✎</a>
+                    <form asp-action="Delete" method="post" onsubmit="return confirm('¿Eliminar este registro?');">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@log.Id" />
+                        <input type="hidden" name="date" value="@Model.Date.ToString("yyyy-MM-dd")" />
+                        <button type="submit" class="btn-icon" title="Eliminar">✕</button>
+                    </form>
+                </div>
+            </div>
+        }
+    }
+</div>

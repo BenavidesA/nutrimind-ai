@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:NutriMind.Mobile.ViewModels.Auth"
+             x:Class="NutriMind.Mobile.Views.Auth.RegisterPage"
+             BackgroundColor="{StaticResource SystemBackground}"
+             Shell.NavBarIsVisible="False"
+             Title="Registro">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="25,60,25,25" Spacing="25">
+
+            <Label Text="Crear Cuenta" FontSize="32" FontAttributes="Bold" TextColor="{StaticResource PrimaryText}" HorizontalOptions="Start"/>
+            <Label Text="Regístrate para empezar a monitorear tu salud con IA." FontSize="16" TextColor="{StaticResource SecondaryText}" HorizontalOptions="Start" Margin="0,-15,0,0"/>
+
+            <Border StrokeShape="RoundRectangle 12" Stroke="Transparent" BackgroundColor="{StaticResource CardBackground}" Padding="20" HorizontalOptions="Fill">
+                <VerticalStackLayout Spacing="15">
+
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Correo electrónico" FontSize="11" FontAttributes="Bold" TextColor="{StaticResource SecondaryText}"/>
+                        <Border StrokeThickness="0" BackgroundColor="#F2F2F7" StrokeShape="RoundRectangle 10" Padding="15,0" HeightRequest="50">
+                            <Entry Text="{Binding Email}" Keyboard="Email" Placeholder="ejemplo@correo.com" TextColor="Black" PlaceholderColor="Gray" BackgroundColor="Transparent"/>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Contraseña" FontSize="11" FontAttributes="Bold" TextColor="{StaticResource SecondaryText}"/>
+                        <Border StrokeThickness="0" BackgroundColor="#F2F2F7" StrokeShape="RoundRectangle 10" Padding="15,0" HeightRequest="50">
+                            <Grid ColumnDefinitions="*, 40">
+                                <Entry Grid.Column="0" Text="{Binding Password}" IsPassword="{Binding IsPasswordHidden}" Placeholder="••••••••" TextColor="Black" PlaceholderColor="Gray" BackgroundColor="Transparent"/>
+                                <ImageButton Grid.Column="1"
+                                             Command="{Binding TogglePasswordVisibilityCommand}"
+                                             BackgroundColor="Transparent"
+                                             WidthRequest="24" HeightRequest="24"
+                                             HorizontalOptions="Center" VerticalOptions="Center">
+                                    <ImageButton.Source>
+                                        <FontImageSource FontFamily="MaterialOutlined" Glyph="&#xe417;" Color="{StaticResource SecondaryText}" Size="20"/>
+                                    </ImageButton.Source>
+                                </ImageButton>
+                            </Grid>
+                        </Border>
+                        <Label Text="Usa una contraseña segura para proteger tu cuenta." FontSize="12" TextColor="{StaticResource SecondaryText}"/>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Confirmar contraseña" FontSize="11" FontAttributes="Bold" TextColor="{StaticResource SecondaryText}"/>
+                        <Border StrokeThickness="0" BackgroundColor="#F2F2F7" StrokeShape="RoundRectangle 10" Padding="15,0" HeightRequest="50">
+                            <Grid ColumnDefinitions="*, 40">
+                                <Entry Grid.Column="0" Text="{Binding ConfirmPassword}" IsPassword="{Binding IsConfirmPasswordHidden}" Placeholder="••••••••" TextColor="Black" PlaceholderColor="Gray" BackgroundColor="Transparent"/>
+                                <ImageButton Grid.Column="1"
+                                             Command="{Binding ToggleConfirmPasswordVisibilityCommand}"
+                                             BackgroundColor="Transparent"
+                                             WidthRequest="24" HeightRequest="24"
+                                             HorizontalOptions="Center" VerticalOptions="Center">
+                                    <ImageButton.Source>
+                                        <FontImageSource FontFamily="MaterialOutlined" Glyph="&#xe417;" Color="{StaticResource SecondaryText}" Size="20"/>
+                                    </ImageButton.Source>
+                                </ImageButton>
+                            </Grid>
+                        </Border>
+                    </VerticalStackLayout>
+
+                </VerticalStackLayout>
+            </Border>
+
+            <Button Text="Registrarse"
+                    Command="{Binding RegisterCommand}"
+                    BackgroundColor="{StaticResource AppleGreen}"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    FontSize="16"
+                    CornerRadius="12"
+                    HeightRequest="55"
+                    HorizontalOptions="Fill"
+                    Margin="0,10,0,0"/>
+
+            <Button Text="Ya tengo una cuenta. Iniciar sesión."
+                    Command="{Binding GoBackCommand}"
+                    BackgroundColor="Transparent"
+                    TextColor="#5E5CE6"
+                    FontAttributes="Bold"
+                    FontSize="15"
+                    HorizontalOptions="Fill"/>
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}" Color="{StaticResource AppleGreen}" HorizontalOptions="Center"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

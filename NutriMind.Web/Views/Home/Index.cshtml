@@ -1,0 +1,78 @@
+@model HomeViewModel
+@{
+    ViewData["Title"] = "Inicio";
+}
+
+<div class="page-header">
+    <h1>Hola@(string.IsNullOrEmpty(Model.FirstName) ? "" : $", {Model.FirstName}")</h1>
+</div>
+
+@if (!string.IsNullOrEmpty(Model.ErrorMessage))
+{
+    <div class="alert alert-error">@Model.ErrorMessage</div>
+}
+
+<div class="stat-grid mt-2">
+    <div class="stat-card stat-primary">
+        <span class="stat-value">@Model.CurrentStreak</span>
+        <span class="stat-label">Racha (días)</span>
+    </div>
+    <div class="stat-card stat-accent">
+        <span class="stat-value">@Model.TotalPoints</span>
+        <span class="stat-label">Puntos</span>
+    </div>
+    <div class="stat-card">
+        <span class="stat-value">@(Model.TodayStats != null ? Model.TodayStats.TotalCaloriesConsumed.ToString("0") : "0")</span>
+        <span class="stat-label">Kcal hoy</span>
+    </div>
+</div>
+
+@if (Model.TodayStats != null)
+{
+    <div class="card mt-3">
+        <h2>Macros de hoy</h2>
+        <div class="stat-grid">
+            <div class="stat-card">
+                <span class="stat-value">@Model.TodayStats.TotalProtein.ToString("0")g</span>
+                <span class="stat-label">Proteína</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-value">@Model.TodayStats.TotalCarbs.ToString("0")g</span>
+                <span class="stat-label">Carbohidratos</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-value">@Model.TodayStats.TotalFat.ToString("0")g</span>
+                <span class="stat-label">Grasa</span>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="card">
+    <h2>Accesos rápidos</h2>
+    <div class="page-header-actions" style="flex-wrap: wrap;">
+        <a class="btn btn-primary btn-sm" asp-controller="FoodLog" asp-action="Index">Registrar comida</a>
+        <a class="btn btn-primary btn-sm" asp-controller="MealPlans" asp-action="Index">Planes de alimentación</a>
+        <a class="btn btn-primary btn-sm" asp-controller="Ai" asp-action="Chat">Preguntar a la IA</a>
+    </div>
+</div>
+
+<div class="card">
+    <h2>Medallas recientes</h2>
+    @if (Model.RecentBadges.Any())
+    {
+        <div class="page-header-actions" style="flex-wrap: wrap;">
+            @foreach (var badge in Model.RecentBadges)
+            {
+                <span class="badge-chip">🏅 @badge.Name</span>
+            }
+        </div>
+    }
+    else
+    {
+        <p>Todavía no tienes medallas. ¡Registra comidas seguido para ganar tu primera racha!</p>
+    }
+    <div class="mt-2">
+        <a class="btn-link" asp-controller="Profile" asp-action="Index">Ver todas tus medallas</a>
+    </div>
+</div>

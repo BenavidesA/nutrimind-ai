@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:NutriMind.Mobile.Models.MealPlans"
+             xmlns:vm="clr-namespace:NutriMind.Mobile.ViewModels.MealPlans"
+             x:Class="NutriMind.Mobile.Views.MealPlans.MealPlanPage"
+             x:DataType="vm:MealPlanViewModel"
+             BackgroundColor="{StaticResource SystemBackground}"
+             Title="Planes de alimentación">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="+" Command="{Binding GoToAddMealPlanCommand}" />
+    </ContentPage.ToolbarItems>
+
+    <Grid>
+        <RefreshView IsRefreshing="{Binding IsBusy}" Command="{Binding LoadMealPlansCommand}">
+
+            <CollectionView ItemsSource="{Binding MealPlans}"
+                            SelectionMode="None"
+                            Margin="20,20,20,0">
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:MealPlanResponseDto">
+
+                        <SwipeView>
+                            <SwipeView.RightItems>
+                                <SwipeItems>
+                                    <SwipeItem Text="Eliminar"
+                                               BackgroundColor="{StaticResource DestructiveRed}"
+                                               Command="{Binding Source={RelativeSource AncestorType={x:Type CollectionView}}, Path=BindingContext.DeleteMealPlanCommand}"
+                                               CommandParameter="{Binding .}">
+                                        <SwipeItem.IconImageSource>
+                                            <FontImageSource FontFamily="MaterialOutlined" Glyph="&#xe872;" Color="White" Size="24"/>
+                                        </SwipeItem.IconImageSource>
+                                    </SwipeItem>
+                                    <SwipeItem Text="Editar"
+                                               BackgroundColor="#5E5CE6"
+                                               Command="{Binding Source={RelativeSource AncestorType={x:Type CollectionView}}, Path=BindingContext.EditMealPlanCommand}"
+                                               CommandParameter="{Binding .}">
+                                        <SwipeItem.IconImageSource>
+                                            <FontImageSource FontFamily="MaterialOutlined" Glyph="&#xe150;" Color="White" Size="24"/>
+                                        </SwipeItem.IconImageSource>
+                                    </SwipeItem>
+                                </SwipeItems>
+                            </SwipeView.RightItems>
+
+                            <Border StrokeShape="RoundRectangle 12"
+                                    Stroke="Transparent"
+                                    BackgroundColor="{StaticResource CardBackground}"
+                                    Margin="0,0,0,15"
+                                    Padding="20">
+
+                                <VerticalStackLayout Spacing="4">
+                                    <Grid ColumnDefinitions="*, Auto">
+                                        <Label Grid.Column="0" Text="{Binding Name}" FontSize="17" FontAttributes="Bold" TextColor="{StaticResource PrimaryText}"/>
+                                        <Border Grid.Column="1" IsVisible="{Binding IsActive}" BackgroundColor="{StaticResource AppleGreen}"
+                                                StrokeThickness="0" StrokeShape="RoundRectangle 10" Padding="10,4" VerticalOptions="Center">
+                                            <Label Text="Activo" FontSize="11" FontAttributes="Bold" TextColor="White"/>
+                                        </Border>
+                                    </Grid>
+                                    <Label FontSize="13" TextColor="{StaticResource SecondaryText}">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="{Binding StartDate, StringFormat='{0:dd/MM/yyyy}'}"/>
+                                                <Span Text=" - "/>
+                                                <Span Text="{Binding EndDate, StringFormat='{0:dd/MM/yyyy}'}"/>
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                                    <Label Text="{Binding TotalCaloriesPerDay, StringFormat='{0:F0} kcal/día'}" FontSize="15" FontAttributes="Bold" TextColor="#2E7D32" Margin="0,4,0,0"/>
+                                </VerticalStackLayout>
+                            </Border>
+                        </SwipeView>
+
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+
+                <CollectionView.EmptyView>
+                    <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="10" Margin="0,100,0,0">
+                        <Label Text="&#xebcc;" FontFamily="MaterialOutlined" FontSize="48" TextColor="{StaticResource SecondaryText}" HorizontalOptions="Center" Margin="0,0,0,10"/>
+                        <Label Text="No tienes planes de alimentación" FontSize="18" TextColor="{StaticResource SecondaryText}" HorizontalOptions="Center"/>
+                        <Label Text="Toca + para crear uno" FontSize="14" TextColor="{StaticResource SecondaryText}" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </CollectionView.EmptyView>
+
+            </CollectionView>
+        </RefreshView>
+    </Grid>
+</ContentPage>

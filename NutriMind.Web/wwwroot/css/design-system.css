@@ -1,0 +1,584 @@
+/*
+  Sistema de diseño global de NutriMind.Web — reemplaza Bootstrap por completo.
+  Reutiliza la paleta de marca ya establecida en NutriMind.Mobile (AppleGreen,
+  DestructiveRed, grises del sistema) para continuidad visual entre plataformas.
+  Válido para TODA la web, no solo esta fase — nuevas páginas deben construirse
+  sobre estas variables y clases, no reintroducir Bootstrap ni un framework nuevo.
+*/
+
+:root {
+    /* Color de marca — mismo verde que usa NutriMind.Mobile en todos los botones primarios */
+    --color-primary: #34C759;
+    --color-primary-hover: #2AA648;
+    --color-primary-contrast: #FFFFFF;
+
+    /* Rojo semántico — exclusivo para acciones destructivas/irreversibles */
+    --color-danger: #FF3B30;
+    --color-danger-hover: #D93027;
+    --color-danger-contrast: #FFFFFF;
+
+    /* Acento secundario (mismo indigo usado en Mobile para elementos informativos) */
+    --color-accent: #5E5CE6;
+
+    /* Fondos y superficies */
+    --color-bg: #F2F2F7;
+    --color-surface: #FFFFFF;
+    --color-border: #E5E5EA;
+    --color-separator: #C6C6C8;
+
+    /* Texto */
+    --color-text-primary: #000000;
+    --color-text-secondary: #8E8E93;
+    --color-text-on-primary: #FFFFFF;
+
+    /* Tipografía */
+    --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-size-base: 16px;
+    --line-height-base: 1.5;
+    --max-content-width: 75ch;
+
+    /* Radios de borde */
+    --radius-sm: 12px;
+    --radius-lg: 16px;
+
+    /* Grid de espaciado (base 8px) */
+    --space-1: 8px;
+    --space-2: 16px;
+    --space-3: 24px;
+    --space-4: 32px;
+    --space-5: 40px;
+    --space-6: 48px;
+
+    /* Transiciones */
+    --transition-base: 0.2s ease-in-out;
+
+    /* Sombras (elevación sutil, no "Web 2.0") */
+    --shadow-card: 0 6px 24px rgba(0, 0, 0, 0.06);
+}
+
+/* --- Reset base --- */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-family);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-base);
+    color: var(--color-text-primary);
+    background-color: var(--color-bg);
+    -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6, p {
+    margin: 0 0 var(--space-2) 0;
+}
+
+h1 { font-size: 28px; font-weight: 700; }
+h2 { font-size: 22px; font-weight: 700; }
+h3 { font-size: 18px; font-weight: 600; }
+
+p {
+    max-width: var(--max-content-width);
+    color: var(--color-text-secondary);
+}
+
+a {
+    color: var(--color-accent);
+    text-decoration: none;
+    transition: opacity var(--transition-base);
+}
+
+a:hover {
+    opacity: 0.75;
+}
+
+/* --- Layout de autenticación (Login/Registro/Recuperar) --- */
+.auth-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-3);
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 420px;
+    background-color: var(--color-surface);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    padding: var(--space-5) var(--space-4);
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: var(--space-4);
+}
+
+.auth-header img {
+    height: 56px;
+    margin-bottom: var(--space-2);
+}
+
+.auth-header h1 {
+    font-size: 22px;
+    margin-bottom: 4px;
+}
+
+.auth-header p {
+    max-width: none;
+    font-size: 14px;
+    margin: 0 auto;
+}
+
+.auth-footer {
+    text-align: center;
+    margin-top: var(--space-3);
+    font-size: 14px;
+    color: var(--color-text-secondary);
+}
+
+/* --- Formularios --- */
+.form-group {
+    margin-bottom: var(--space-2);
+}
+
+.form-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    margin-bottom: 6px;
+}
+
+.form-input {
+    width: 100%;
+    height: 48px;
+    padding: 0 var(--space-2);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background-color: var(--color-bg);
+    font-family: var(--font-family);
+    font-size: 15px;
+    color: var(--color-text-primary);
+    transition: border-color var(--transition-base), box-shadow var(--transition-base);
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(52, 199, 89, 0.15);
+}
+
+.form-input.input-error {
+    border-color: var(--color-danger);
+}
+
+.field-validation-error {
+    display: block;
+    color: var(--color-danger);
+    font-size: 13px;
+    margin-top: 6px;
+}
+
+.validation-summary-errors {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--space-2) 0;
+}
+
+/* --- Botones --- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 48px;
+    padding: 0 var(--space-3);
+    border: none;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-family);
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color var(--transition-base), opacity var(--transition-base);
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn-primary {
+    background-color: var(--color-primary);
+    color: var(--color-text-on-primary);
+}
+
+.btn-primary:hover:not(:disabled) {
+    background-color: var(--color-primary-hover);
+}
+
+.btn-danger {
+    background-color: var(--color-danger);
+    color: var(--color-danger-contrast);
+}
+
+.btn-danger:hover:not(:disabled) {
+    background-color: var(--color-danger-hover);
+}
+
+.btn-text {
+    background-color: transparent;
+    color: var(--color-text-secondary);
+    font-weight: 600;
+    height: auto;
+    padding: var(--space-1) 0;
+}
+
+.btn-text:hover:not(:disabled) {
+    opacity: 0.75;
+    background-color: transparent;
+}
+
+.btn-link {
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--color-accent);
+    font-family: var(--font-family);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.btn-link:hover {
+    opacity: 0.75;
+}
+
+/* --- Alertas --- */
+.alert {
+    border-radius: var(--radius-sm);
+    padding: var(--space-2);
+    margin-bottom: var(--space-2);
+    font-size: 14px;
+}
+
+.alert-error {
+    background-color: rgba(255, 59, 48, 0.08);
+    color: var(--color-danger);
+}
+
+.alert-success {
+    background-color: rgba(52, 199, 89, 0.10);
+    color: var(--color-primary-hover);
+}
+
+/* --- Utilidades --- */
+.text-center { text-align: center; }
+.mt-2 { margin-top: var(--space-2); }
+.mt-3 { margin-top: var(--space-3); }
+
+/* --- Shell de la app autenticada (nav + contenido) --- */
+.app-nav {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.app-nav-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 var(--space-3);
+    height: 64px;
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.app-nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    flex-shrink: 0;
+}
+
+.app-nav-brand:hover {
+    opacity: 1;
+}
+
+.app-nav-brand img {
+    height: 28px;
+}
+
+.app-nav-links {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    flex: 1;
+    overflow-x: auto;
+}
+
+.app-nav-link {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    white-space: nowrap;
+    padding: 8px 0;
+    border-bottom: 2px solid transparent;
+}
+
+.app-nav-link:hover {
+    opacity: 1;
+    color: var(--color-text-primary);
+}
+
+.app-nav-link.active {
+    color: var(--color-primary-hover);
+    border-bottom-color: var(--color-primary);
+}
+
+.app-nav-logout {
+    flex-shrink: 0;
+}
+
+.app-content {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: var(--space-3);
+}
+
+.page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+    margin-bottom: var(--space-3);
+    flex-wrap: wrap;
+}
+
+.page-header h1 {
+    margin-bottom: 0;
+}
+
+.page-header-actions {
+    display: flex;
+    gap: var(--space-2);
+}
+
+/* --- Tarjetas --- */
+.card {
+    background-color: var(--color-surface);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    padding: var(--space-3);
+    margin-bottom: var(--space-3);
+}
+
+.card h2, .card h3 {
+    margin-bottom: var(--space-2);
+}
+
+/* --- Grid de estadísticas (dashboard) --- */
+.stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: var(--space-2);
+}
+
+.stat-card {
+    background-color: var(--color-surface);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    padding: var(--space-2);
+    text-align: center;
+}
+
+.stat-card .stat-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    display: block;
+}
+
+.stat-card .stat-label {
+    font-size: 13px;
+    color: var(--color-text-secondary);
+}
+
+.stat-card.stat-primary .stat-value {
+    color: var(--color-primary-hover);
+}
+
+.stat-card.stat-accent .stat-value {
+    color: var(--color-accent);
+}
+
+/* --- Listas (registro de comidas, planes, medallas) --- */
+.item-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+}
+
+.list-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+    background-color: var(--color-surface);
+    border-radius: var(--radius-sm);
+    padding: var(--space-2);
+    box-shadow: var(--shadow-card);
+}
+
+.list-item-main {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.list-item-title {
+    font-weight: 600;
+    color: var(--color-text-primary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.list-item-subtitle {
+    font-size: 13px;
+    color: var(--color-text-secondary);
+}
+
+.list-item-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    flex-shrink: 0;
+}
+
+.empty-state {
+    text-align: center;
+    padding: var(--space-4) var(--space-2);
+    color: var(--color-text-secondary);
+}
+
+/* --- Botones pequeños (icon/inline en listas) --- */
+.btn-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-border);
+    background-color: var(--color-bg);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.btn-icon:hover {
+    opacity: 1;
+    border-color: var(--color-danger);
+    color: var(--color-danger);
+}
+
+.btn-sm {
+    width: auto;
+    height: 36px;
+    padding: 0 var(--space-2);
+    font-size: 14px;
+}
+
+/* --- Chips de medallas --- */
+.badge-chip {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    background-color: rgba(94, 92, 230, 0.08);
+    border-radius: 999px;
+    padding: 6px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-accent);
+}
+
+/* --- Selects (mismo look que .form-input) --- */
+select.form-input {
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238E8E93' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px;
+    padding-right: 36px;
+}
+
+textarea.form-input {
+    height: auto;
+    padding: var(--space-2);
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* --- Chat de IA --- */
+.chat-window {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    min-height: 320px;
+    max-height: 55vh;
+    overflow-y: auto;
+    padding: var(--space-1);
+}
+
+.chat-bubble {
+    max-width: 80%;
+    padding: 10px 14px;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    line-height: 1.4;
+    white-space: pre-wrap;
+}
+
+.chat-bubble-user {
+    align-self: flex-end;
+    background-color: var(--color-primary);
+    color: var(--color-text-on-primary);
+    border-bottom-right-radius: 4px;
+}
+
+.chat-bubble-ai {
+    align-self: flex-start;
+    background-color: var(--color-bg);
+    color: var(--color-text-primary);
+    border-bottom-left-radius: 4px;
+}
+
+.chat-input-row {
+    display: flex;
+    gap: var(--space-1);
+    margin-top: var(--space-2);
+}
+
+.chat-input-row .form-input {
+    flex: 1;
+}
+
+.chat-input-row .btn {
+    width: auto;
+    padding: 0 var(--space-3);
+}

@@ -1,0 +1,82 @@
+@{
+    ViewData["Title"] = "Asistente IA";
+}
+
+<div class="page-header">
+    <h1>Asistente de nutrición</h1>
+</div>
+
+<div class="card">
+    <form id="antiforgery-form">@Html.AntiForgeryToken()</form>
+
+    <div id="chat-window" class="chat-window">
+        <div class="chat-bubble chat-bubble-ai">¡Hola! Pregúntame sobre nutrición, tus comidas de hoy o pide sugerencias.</div>
+    </div>
+
+    <div id="chat-error" class="alert alert-error" style="display:none;"></div>
+
+    <form id="chat-form" class="chat-input-row">
+        <input id="chat-input" class="form-input" type="text" placeholder="Escribe tu pregunta..." autocomplete="off" required />
+        <button type="submit" id="chat-submit" class="btn btn-primary">Enviar</button>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        (function () {
+            var chatWindow = document.getElementById('chat-window');
+            var chatForm = document.getElementById('chat-form');
+            var chatInput = document.getElementById('chat-input');
+            var chatSubmit = document.getElementById('chat-submit');
+            var chatError = document.getElementById('chat-error');
+            var token = document.querySelector('#antiforgery-form input[name="__RequestVerificationToken"]').value;
+
+            function appendBubble(text, who) {
+                var bubble = document.createElement('div');
+                bubble.className = 'chat-bubble ' + (who === 'user' ? 'chat-bubble-user' : 'chat-bubble-ai');
+                bubble.textContent = text;
+                chatWindow.appendChild(bubble);
+                chatWindow.scrollTop = chatWindow.scrollHeight;
+            }
+
+            chatForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+                var message = chatInput.value.trim();
+                if (!message) return;
+
+                chatError.style.display = 'none';
+                appendBubble(message, 'user');
+                chatInput.value = '';
+                chatInput.disabled = true;
+                chatSubmit.disabled = true;
+
+                fetch('/Ai/ChatMessage', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': token
+                    },
+                    body: JSON.stringify({ message: message })
+                })
+                    .then(function (response) {
+                        return response.json().then(function (data) {
+                            if (!response.ok) throw new Error(data.error || 'El asistente no respondió correctamente.');
+                            return data;
+                        });
+                    })
+                    .then(function (data) {
+                        appendBubble(data.reply, 'ai');
+                    })
+                    .catch(function (err) {
+                        chatError.textContent = err.message;
+                        chatError.style.display = 'block';
+                    })
+                    .finally(function () {
+                        chatInput.disabled = false;
+                        chatSubmit.disabled = false;
+                        chatInput.focus();
+                    });
+            });
+        })();
+    </script>
+}

@@ -1,0 +1,10 @@
+using NutriMind.Domain.Interfaces.Repositories;
+
+namespace NutriMind.Domain.Interfaces
+{
+    public interface IUnitOfWork : IDisposable
+    {
+        IRepository<T> Repository<T>() where T : class;
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+    }
+}

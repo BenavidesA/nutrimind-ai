@@ -1,0 +1,36 @@
+@model VerifyCodeViewModel
+@{
+    ViewData["Title"] = "Verificar código";
+}
+
+<div class="auth-page">
+    <div class="auth-card">
+        <div class="auth-header">
+            <img src="~/images/logo.png" alt="NutriMind" />
+            <h1>Verificar código</h1>
+            <p>Ingresa el código de 6 dígitos que enviamos a tu correo.</p>
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+        {
+            <div class="alert alert-error">@Model.ErrorMessage</div>
+        }
+
+        <form asp-controller="Auth" asp-action="VerifyCode" method="post" data-validate novalidate>
+            @Html.AntiForgeryToken()
+            <input asp-for="Email" type="hidden" />
+
+            <div class="form-group">
+                <label class="form-label" asp-for="Code"></label>
+                <input asp-for="Code" class="form-input" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" placeholder="123456" required autocomplete="one-time-code" />
+                <span asp-validation-for="Code" class="field-validation-error"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-2">Verificar código</button>
+        </form>
+
+        <div class="auth-footer">
+            <a asp-controller="Auth" asp-action="ForgotPassword">Usar otro correo</a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,6 @@
+@NutriMind.API_HostAddress = http://localhost:5101
+
+GET {{NutriMind.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

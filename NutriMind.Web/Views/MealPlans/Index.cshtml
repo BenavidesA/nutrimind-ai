@@ -1,0 +1,47 @@
+@model MealPlanListViewModel
+@{
+    ViewData["Title"] = "Planes de alimentación";
+}
+
+<div class="page-header">
+    <h1>Planes de alimentación</h1>
+    <div class="page-header-actions">
+        <a class="btn btn-primary btn-sm" asp-action="Generate">✨ Generar con IA</a>
+        <a class="btn btn-primary btn-sm" asp-action="Create">+ Crear manual</a>
+    </div>
+</div>
+
+@if (!string.IsNullOrEmpty(Model.ErrorMessage))
+{
+    <div class="alert alert-error">@Model.ErrorMessage</div>
+}
+
+<div class="item-list">
+    @if (!Model.Plans.Any())
+    {
+        <div class="empty-state">Todavía no tienes planes de alimentación.</div>
+    }
+    else
+    {
+        @foreach (var plan in Model.Plans)
+        {
+            <div class="list-item">
+                <div class="list-item-main">
+                    <span class="list-item-title">@plan.Name @(plan.IsAIGenerated ? "✨" : "")</span>
+                    <span class="list-item-subtitle">
+                        @plan.StartDate.ToString("d MMM") - @plan.EndDate.ToString("d MMM") · @plan.TotalCaloriesPerDay.ToString("0") kcal/día
+                    </span>
+                </div>
+                <div class="list-item-actions">
+                    <a class="btn-icon" title="Ver detalle" asp-action="Details" asp-route-id="@plan.Id">👁</a>
+                    <a class="btn-icon" title="Editar" asp-action="Edit" asp-route-id="@plan.Id">✎</a>
+                    <form asp-action="Delete" method="post" onsubmit="return confirm('¿Eliminar este plan?');">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@plan.Id" />
+                        <button type="submit" class="btn-icon" title="Eliminar">✕</button>
+                    </form>
+                </div>
+            </div>
+        }
+    }
+</div>

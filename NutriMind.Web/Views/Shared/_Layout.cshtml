@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - NutriMind</title>
+    <link rel="icon" type="image/png" href="~/images/logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/design-system.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    @if (User.Identity?.IsAuthenticated == true)
+    {
+        var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+        <header class="app-nav">
+            <div class="app-nav-inner">
+                <a class="app-nav-brand" asp-controller="Home" asp-action="Index">
+                    <img src="~/images/logo.png" alt="NutriMind" />
+                    <span>NutriMind</span>
+                </a>
+                <nav class="app-nav-links">
+                    <a class="app-nav-link @(currentController == "Home" ? "active" : "")" asp-controller="Home" asp-action="Index">Inicio</a>
+                    <a class="app-nav-link @(currentController == "FoodLog" ? "active" : "")" asp-controller="FoodLog" asp-action="Index">Registro de comidas</a>
+                    <a class="app-nav-link @(currentController == "MealPlans" ? "active" : "")" asp-controller="MealPlans" asp-action="Index">Planes</a>
+                    <a class="app-nav-link @(currentController == "Ai" ? "active" : "")" asp-controller="Ai" asp-action="Chat">Asistente IA</a>
+                    <a class="app-nav-link @(currentController == "Profile" ? "active" : "")" asp-controller="Profile" asp-action="Index">Perfil</a>
+                </nav>
+                <form class="app-nav-logout" asp-controller="Auth" asp-action="Logout" method="post">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn-link">Cerrar sesión</button>
+                </form>
+            </div>
+        </header>
+        <main class="app-content">
+            @RenderBody()
+        </main>
+    }
+    else
+    {
+        @RenderBody()
+    }
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

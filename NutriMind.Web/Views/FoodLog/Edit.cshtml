@@ -1,0 +1,56 @@
+@model EditFoodLogViewModel
+@{
+    ViewData["Title"] = "Editar registro";
+}
+
+<div class="page-header">
+    <h1>Editar registro</h1>
+</div>
+
+<div class="card" style="max-width: 480px;">
+    <p><strong>@Model.FoodName</strong></p>
+
+    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <div class="alert alert-error">@Model.ErrorMessage</div>
+    }
+
+    <form asp-action="Edit" method="post" data-validate novalidate>
+        @Html.AntiForgeryToken()
+        <input asp-for="Id" type="hidden" />
+        <input asp-for="FoodName" type="hidden" />
+
+        <div class="form-group">
+            <label class="form-label" asp-for="QuantityG"></label>
+            <input asp-for="QuantityG" class="form-input" type="number" step="0.1" min="0.1" required />
+            <span asp-validation-for="QuantityG" class="field-validation-error"></span>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label" asp-for="MealTypeId"></label>
+            <select asp-for="MealTypeId" class="form-input">
+                @foreach (var mealType in MealTypes.Names)
+                {
+                    <option value="@mealType.Key">@mealType.Value</option>
+                }
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label" asp-for="Date"></label>
+            <input asp-for="Date" class="form-input" type="date" required />
+            <span asp-validation-for="Date" class="field-validation-error"></span>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label" asp-for="Notes"></label>
+            <textarea asp-for="Notes" class="form-input"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-2">Guardar cambios</button>
+    </form>
+
+    <div class="text-center mt-3">
+        <a class="btn-link" asp-action="Index" asp-route-date="@Model.Date.ToString("yyyy-MM-dd")">Cancelar</a>
+    </div>
+</div>

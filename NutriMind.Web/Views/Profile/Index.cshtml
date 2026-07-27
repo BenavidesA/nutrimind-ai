@@ -1,0 +1,75 @@
+@model ProfileIndexViewModel
+@{
+    ViewData["Title"] = "Perfil";
+}
+
+<div class="page-header">
+    <h1>Mi perfil</h1>
+    <div class="page-header-actions">
+        <a class="btn btn-primary btn-sm" asp-action="Edit">Editar perfil</a>
+    </div>
+</div>
+
+@if (!string.IsNullOrEmpty(Model.ErrorMessage))
+{
+    <div class="alert alert-error">@Model.ErrorMessage</div>
+}
+
+@if (Model.Profile != null)
+{
+    var profile = Model.Profile;
+    <div class="card">
+        <h2>@profile.FirstName @profile.LastName</h2>
+        <p>@profile.Email</p>
+        <div class="stat-grid">
+            <div class="stat-card">
+                <span class="stat-value">@(profile.Age?.ToString() ?? "-")</span>
+                <span class="stat-label">Edad</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-value">@(profile.HeightCm?.ToString("0") ?? "-")</span>
+                <span class="stat-label">Estatura (cm)</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-value">@(profile.WeightKg?.ToString("0.0") ?? "-")</span>
+                <span class="stat-label">Peso (kg)</span>
+            </div>
+        </div>
+        <p class="mt-2">
+            <strong>Nivel de actividad:</strong> @profile.ActivityLevel<br />
+            <strong>Objetivo:</strong> @profile.DietaryGoal<br />
+            @if (!string.IsNullOrEmpty(profile.University))
+            {
+                <text><strong>Universidad:</strong> @profile.University</text>
+            }
+        </p>
+    </div>
+}
+
+<div class="card">
+    <h2>Medallas</h2>
+    @if (Model.Badges.Any())
+    {
+        <div class="page-header-actions" style="flex-wrap: wrap;">
+            @foreach (var badge in Model.Badges)
+            {
+                <span class="badge-chip" title="@badge.Description">🏅 @badge.Name</span>
+            }
+        </div>
+    }
+    else
+    {
+        <p>Todavía no tienes medallas.</p>
+    }
+</div>
+
+<div class="card">
+    <h2>Cuenta</h2>
+    <div class="page-header-actions" style="flex-wrap: wrap;">
+        <a class="btn-link" asp-action="ChangePassword">Cambiar contraseña</a>
+    </div>
+    <form class="mt-3" asp-action="DeleteAccount" method="post" onsubmit="return confirm('Esta acción desactivará tu cuenta. ¿Continuar?');">
+        @Html.AntiForgeryToken()
+        <button type="submit" class="btn btn-danger" style="width:auto; padding: 0 var(--space-3);">Eliminar cuenta</button>
+    </form>
+</div>

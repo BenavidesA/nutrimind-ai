@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="NutriMind.Mobile.Views.Food.AddFoodPage"
+             BackgroundColor="{StaticResource SystemBackground}"
+             Title="Agregar Comida">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20,30,20,20" Spacing="25">
+
+            <Label Text="Nuevo Alimento" FontSize="30" FontAttributes="Bold" TextColor="{StaticResource PrimaryText}"/>
+            <Label Text="Ingresa los detalles nutricionales de tu comida." FontSize="15" TextColor="{StaticResource SecondaryText}" Margin="0,-15,0,0"/>
+
+            <Border StrokeShape="RoundRectangle 12" Stroke="Transparent" BackgroundColor="{StaticResource CardBackground}" Padding="20">
+                <VerticalStackLayout Spacing="15">
+
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="NOMBRE DEL ALIMENTO" FontSize="12" FontAttributes="Bold" TextColor="{StaticResource SecondaryText}"/>
+                        <Border StrokeThickness="0" BackgroundColor="#F2F2F7" StrokeShape="RoundRectangle 10" Padding="15,0" HeightRequest="50">
+                            <Entry Text="{Binding Name}" Placeholder="Ej. Manzana" TextColor="Black" BackgroundColor="Transparent"/>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <BoxView HeightRequest="1" Color="{StaticResource SeparatorColor}" Margin="0,5"/>
+
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="CANTIDAD (GRAMOS)" FontSize="12" FontAttributes="Bold" TextColor="{StaticResource SecondaryText}"/>
+                        <Border StrokeThickness="0" BackgroundColor="#F2F2F7" StrokeShape="RoundRectangle 10" Padding="15,0" HeightRequest="50">
+                            <Entry Text="{Binding Grams}" Keyboard="Numeric" Placeholder="Ej. 150" TextColor="Black" BackgroundColor="Transparent"/>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <Label Text="Los valores nutricionales se calculan automáticamente." FontSize="12" TextColor="{StaticResource SecondaryText}" Margin="0,5,0,0"/>
+                </VerticalStackLayout>
+            </Border>
+
+            <Button Text="Guardar Alimento" Command="{Binding SaveCommand}" BackgroundColor="{StaticResource AppleGreen}" TextColor="White" FontAttributes="Bold" FontSize="16" CornerRadius="12" HeightRequest="55" Margin="0,10,0,0"/>
+            <Button Text="Cancelar" Command="{Binding CancelCommand}" BackgroundColor="Transparent" TextColor="{StaticResource DestructiveRed}" FontAttributes="Bold" FontSize="16"/>
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}" Color="{StaticResource AppleGreen}" HorizontalOptions="Center"/>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
