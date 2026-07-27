@@ -1,4 +1,3 @@
-using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
 using NutriMind.Mobile.Services.Api;
 using NutriMind.Mobile.Services.Storage;
@@ -12,7 +11,6 @@ using NutriMind.Mobile.Views.Food;
 
 using SkiaSharp.Views.Maui.Controls.Hosting;
 using Microcharts.Maui;
-using UraniumUI;
 using NutriMind.Mobile.Views.Home;
 using NutriMind.Mobile.ViewModels.Home;
 using NutriMind.Mobile.ViewModels.MealPlans;
@@ -35,14 +33,12 @@ public static class MauiProgram
 
         builder
             .UseMauiApp<App>()
-            .UseMauiCommunityToolkit()
             .UseSkiaSharp()
             .UseMicrocharts()
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-                fonts.AddMaterialSymbolsFonts();
             });
 
 #if ANDROID
