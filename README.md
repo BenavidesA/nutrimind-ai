@@ -58,7 +58,7 @@ NutriMind.Web     --HTTP-->  NutriMind.API   (ASP.NET Core MVC)
 .NET MAUI app targeting Android, iOS, Mac Catalyst, and Windows.
 
 - **MVVM** with CommunityToolkit.Mvvm (`[ObservableProperty]` / `[RelayCommand]`) and Shell-based navigation.
-- CommunityToolkit.Maui for UI utilities, Microcharts.Maui + SkiaSharp for nutrition charts, UraniumUI.Icons.MaterialSymbols for iconography.
+- Microcharts.Maui + SkiaSharp for nutrition charts.
 - A centralized typed `HttpClient` (`ApiService`) with a `DelegatingHandler` that attaches the stored JWT to outgoing requests.
 
 ### Web (`NutriMind.Web`)
