@@ -108,9 +108,9 @@ builder.Services.AddScoped<IMealPlanService, MealPlanService>();
 builder.Services.AddScoped<IGamificationService, GamificationService>();
 
 // --- RESEND (correo transaccional para recuperación de contraseña) ---
-builder.Services.Configure<ResendSettings>(builder.Configuration.GetSection("Resend"));
-builder.Services.AddResend(builder.Configuration["Resend:ApiKey"]
-    ?? throw new InvalidOperationException("Resend:ApiKey no está configurado."));
+builder.Services.Configure<ResendSettings>(builder.Configuration.GetSection("ResendSettings"));
+builder.Services.AddResend(builder.Configuration["ResendSettings:ApiKey"]
+    ?? throw new InvalidOperationException("ResendSettings:ApiKey no está configurado."));
 builder.Services.AddScoped<IEmailService, ResendEmailService>();
 
 var app = builder.Build();
