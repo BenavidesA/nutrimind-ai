@@ -1,9 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NutriMind.Application.Interfaces.Services;
-using NutriMind.Application.DTOs.Foods;
 using System;
-using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -15,15 +13,10 @@ namespace NutriMind.API.Controllers
     public class FoodsController : ControllerBase
     {
         private readonly IFoodService _foodService;
-        private readonly IFoodLogService _foodLogService;
 
-        // Lista est�tica en memoria para simular la base de datos de forma inmediata y veloz
-        private static readonly System.Collections.Generic.List<object> _emergencyLog = new();
-
-        public FoodsController(IFoodService foodService, IFoodLogService foodLogService)
+        public FoodsController(IFoodService foodService)
         {
             _foodService = foodService;
-            _foodLogService = foodLogService;
         }
 
         [HttpGet]
@@ -55,49 +48,6 @@ namespace NutriMind.API.Controllers
 
             var result = await _foodService.GetFoodByBarcodeAsync(code, cancellationToken);
             return result.IsSuccess ? Ok(result.Data) : BadRequest(result.ErrorMessage);
-        }
-
-        // ==========================================
-        // M�TODOS DE PERSISTENCIA EN MEMORIA VIVA
-        // ==========================================
-
-        [HttpGet("log")]
-        public async Task<IActionResult> GetUserLog(CancellationToken cancellationToken)
-        {
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (!Guid.TryParse(userIdClaim, out Guid userId))
-                return Unauthorized();
-
-            await Task.Delay(5, cancellationToken);
-            return Ok(_emergencyLog);
-        }
-
-        [HttpPost("add")]
-        public async Task<IActionResult> AddToLog([FromBody] FoodAddRequest request, CancellationToken cancellationToken)
-        {
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (!Guid.TryParse(userIdClaim, out Guid userId))
-                return Unauthorized();
-
-            if (request == null)
-                return BadRequest("Datos inv�lidos.");
-
-            var newLogEntry = new
-            {
-                Id = Guid.NewGuid(),
-                Name = request.Name,
-                Calories = request.Calories,
-                Carbs = request.Carbs,
-                Protein = request.Protein,
-                Fat = request.Fat,
-                ServingSizeG = request.ServingSizeG,
-                LogDate = DateTime.UtcNow
-            };
-
-            _emergencyLog.Add(newLogEntry);
-
-            await Task.CompletedTask;
-            return Ok(newLogEntry);
         }
     }
 }
