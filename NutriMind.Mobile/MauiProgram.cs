@@ -75,9 +75,15 @@ public static class MauiProgram
         {
             client.BaseAddress = new Uri(Constants.BaseUrl);
         })
-        .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+        .ConfigurePrimaryHttpMessageHandler(() =>
         {
-            ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
+            var handler = new HttpClientHandler();
+#if DEBUG
+            // Solo en builds de depuración: acepta el certificado autofirmado del servidor
+            // local de desarrollo. Esto nunca debe compilarse en un build de Release/Store.
+            handler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true;
+#endif
+            return handler;
         })
         .AddHttpMessageHandler<AuthHeaderHandler>();
 
