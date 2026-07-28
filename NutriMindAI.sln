@@ -25,6 +25,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NutriMind.Mobile", "NutriMi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NutriMind.Web", "NutriMind.Web\NutriMind.Web.csproj", "{FDF85E26-D434-494E-B1A6-BDD058F0A221}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NutriMind.Tests", "NutriMind.Tests\NutriMind.Tests.csproj", "{49F0CE1A-97E9-4A5C-8387-A7143B0D6536}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B5994F0F-BD92-4E70-A6E2-C17CEAE144A8} = {B5994F0F-BD92-4E70-A6E2-C17CEAE144A8}
+		{42D10BF3-46B9-4E0C-8268-0581B9B3FBD8} = {42D10BF3-46B9-4E0C-8268-0581B9B3FBD8}
+		{D297BABC-48FB-432C-9043-89D814D77BC6} = {D297BABC-48FB-432C-9043-89D814D77BC6}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +62,10 @@ Global
 		{FDF85E26-D434-494E-B1A6-BDD058F0A221}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FDF85E26-D434-494E-B1A6-BDD058F0A221}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FDF85E26-D434-494E-B1A6-BDD058F0A221}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49F0CE1A-97E9-4A5C-8387-A7143B0D6536}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49F0CE1A-97E9-4A5C-8387-A7143B0D6536}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49F0CE1A-97E9-4A5C-8387-A7143B0D6536}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49F0CE1A-97E9-4A5C-8387-A7143B0D6536}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
