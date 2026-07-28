@@ -1,15 +1,15 @@
 ﻿namespace NutriMind.Mobile.Helpers;
 
-public static class Constants
+public static partial class Constants
 {
 #if ANDROID
-    // Un teléfono físico no tiene acceso a "localhost" ni a 10.0.2.2 (ese alias solo existe
-    // dentro de la red virtual del emulador) — necesita la IP LAN real de la PC que corre
-    // Docker, y ambos dispositivos deben estar en la misma red Wi-Fi. Esta IP la asigna el
-    // router por DHCP y puede cambiar; si deja de conectar, corre "ipconfig" en la PC y
-    // actualiza este valor. Si vuelves a probar en el emulador en vez de un teléfono físico,
-    // cambia esto de nuevo a "http://10.0.2.2:8080/".
-    public const string BaseUrl = "http://192.168.100.115:8080/";
+    // A physical phone can't reach "localhost" or 10.0.2.2 (that alias only exists inside the
+    // emulator's virtual network) — it needs the dev machine's real LAN IP, and both devices
+    // must be on the same Wi-Fi network. That IP is machine/network-specific, so it lives in
+    // Constants.Local.cs (gitignored) instead of here — copy Constants.Local.cs.example to
+    // create it. If you're testing on the emulator instead of a physical device, set
+    // LocalDevHost to "10.0.2.2" there.
+    public static readonly string BaseUrl = $"http://{LocalDevHost}:8080/";
 #else
     public const string BaseUrl = "http://localhost:8080/";
 #endif

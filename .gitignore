@@ -62,6 +62,9 @@ appsettings.*.local.json
 .env.*
 !.env.example
 
+## IP de red local del desarrollador (específica de cada máquina, ver Constants.Local.cs.example)
+NutriMind.Mobile/Helpers/Constants.Local.cs
+
 ## Herramientas de IA locales (configuración de asistentes de código, no forma parte del proyecto)
 .claude/
 .cursor/
