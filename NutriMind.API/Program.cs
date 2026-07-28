@@ -10,6 +10,7 @@ using NutriMind.Application.Interfaces;
 using NutriMind.Application.Interfaces.Services;
 using NutriMind.Application.Services;
 using NutriMind.Application.Settings;
+using NutriMind.Domain.Entities;
 using NutriMind.Domain.Interfaces;
 using NutriMind.Domain.Interfaces.Repositories;
 using NutriMind.Infrastructure.Authentication;
@@ -131,10 +132,11 @@ using (var migrationScope = app.Services.CreateScope())
     {
         var dbContext = migrationScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         await dbContext.Database.MigrateAsync();
+        await SeedDemoDataAsync(dbContext);
     }
     catch (Exception ex)
     {
-        app.Logger.LogError(ex, "Error al aplicar las migraciones de EF Core al iniciar la aplicación.");
+        app.Logger.LogError(ex, "Error al aplicar las migraciones o los datos de demo al iniciar la aplicación.");
     }
 }
 
@@ -161,4 +163,132 @@ static IAsyncPolicy<HttpResponseMessage> GetGeminiRetryPolicy()
         .HandleTransientHttpError()
         .OrResult(response => response.StatusCode == HttpStatusCode.TooManyRequests)
         .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
+}
+
+// Para que el contenedor Docker sea plug & play: sin esto, la base de datos recién migrada
+// queda sin ningún usuario y un reclutador que levante "docker-compose up" no tiene con qué
+// entrar. "demoUser == null" es el único gate de idempotencia — todo el lote (usuario,
+// categoría, alimentos, registros) se siembra una sola vez, en el primer arranque contra una
+// base de datos vacía; en arranques siguientes esta función no hace nada.
+static async Task SeedDemoDataAsync(ApplicationDbContext dbContext)
+{
+    const string demoEmail = "demo@nutrimind.com";
+
+    var demoUser = await dbContext.Users.FirstOrDefaultAsync(u => u.Email == demoEmail);
+    if (demoUser != null)
+        return;
+
+    // Mismo patrón que AuthService.RegisterAsync: no se asigna Id explícitamente, EF Core
+    // genera el Guid del usuario al insertar.
+    demoUser = new User
+    {
+        Email = demoEmail,
+        PasswordHash = BCrypt.Net.BCrypt.HashPassword("Demo123!"),
+        FirstName = "Usuario",
+        LastName = "Demo",
+        Role = "Student",
+        IsActive = true,
+        EmailConfirmed = true
+    };
+    dbContext.Users.Add(demoUser);
+
+    var category = await dbContext.FoodCategories.FirstOrDefaultAsync();
+    if (category == null)
+    {
+        category = new FoodCategory
+        {
+            Name = "General",
+            Description = "Categoría general de alimentos",
+            IconUrl = string.Empty
+        };
+        dbContext.FoodCategories.Add(category);
+        // Se guarda ya para obtener el Id autogenerado antes de usarlo como FK en los Food de abajo.
+        await dbContext.SaveChangesAsync();
+    }
+
+    var chickenBreast = new Food
+    {
+        Id = Guid.NewGuid(),
+        Name = "Pechuga de pollo (cocida)",
+        Brand = "Genérico",
+        Barcode = string.Empty,
+        ServingSizeG = 100,
+        ServingUnit = "g",
+        CaloriesPer100g = 165,
+        ProteinPer100g = 31,
+        CarbsPer100g = 0,
+        FatPer100g = 3.6m,
+        FiberPer100g = 0,
+        SugarPer100g = 0,
+        SodiumPer100g = 0,
+        ImageUrl = string.Empty,
+        ExternalId = string.Empty,
+        Source = "Seed",
+        IsVerified = true,
+        FoodCategoryId = category.Id
+    };
+
+    var whiteRice = new Food
+    {
+        Id = Guid.NewGuid(),
+        Name = "Arroz blanco (cocido)",
+        Brand = "Genérico",
+        Barcode = string.Empty,
+        ServingSizeG = 100,
+        ServingUnit = "g",
+        CaloriesPer100g = 130,
+        ProteinPer100g = 2.7m,
+        CarbsPer100g = 28,
+        FatPer100g = 0.3m,
+        FiberPer100g = 0,
+        SugarPer100g = 0,
+        SodiumPer100g = 0,
+        ImageUrl = string.Empty,
+        ExternalId = string.Empty,
+        Source = "Seed",
+        IsVerified = true,
+        FoodCategoryId = category.Id
+    };
+
+    dbContext.Foods.AddRange(chickenBreast, whiteRice);
+
+    var now = DateTime.UtcNow;
+
+    // MealTypeId 1 = Breakfast, 2 = Lunch — sembrados por MealTypeConfiguration.HasData,
+    // así que ya existen en cualquier base de datos migrada.
+    var breakfastLog = new FoodLog
+    {
+        Id = Guid.NewGuid(),
+        UserId = demoUser.Id,
+        FoodId = chickenBreast.Id,
+        MealTypeId = 1,
+        LogDate = now,
+        QuantityG = 150,
+        Calories = chickenBreast.CaloriesPer100g * 1.5m,
+        Protein = chickenBreast.ProteinPer100g * 1.5m,
+        Carbs = chickenBreast.CarbsPer100g * 1.5m,
+        Fat = chickenBreast.FatPer100g * 1.5m,
+        Notes = string.Empty,
+        CreatedAt = now
+    };
+
+    var lunchLog = new FoodLog
+    {
+        Id = Guid.NewGuid(),
+        UserId = demoUser.Id,
+        FoodId = whiteRice.Id,
+        MealTypeId = 2,
+        LogDate = now,
+        QuantityG = 200,
+        Calories = whiteRice.CaloriesPer100g * 2m,
+        Protein = whiteRice.ProteinPer100g * 2m,
+        Carbs = whiteRice.CarbsPer100g * 2m,
+        Fat = whiteRice.FatPer100g * 2m,
+        Notes = string.Empty,
+        CreatedAt = now
+    };
+
+    dbContext.FoodLogs.AddRange(breakfastLog, lunchLog);
+
+    await dbContext.SaveChangesAsync();
 }
