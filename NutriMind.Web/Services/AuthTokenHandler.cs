@@ -2,11 +2,11 @@ using System.Net.Http.Headers;
 
 namespace NutriMind.Web.Services;
 
-// Adjunta el AccessToken guardado como claim en la cookie de sesión (ver
-// AuthController.SignInUserAsync) a cada request saliente hacia NutriMind.API.
-// Equivalente web de NutriMind.Mobile/Services/Api/AuthHeaderHandler.cs — allá el token sale de
-// ISecureStorageService, acá sale del HttpContext autenticado vía IHttpContextAccessor porque
-// Web usa cookie auth, no hay almacenamiento local propio.
+// Attaches the AccessToken stored as a claim in the session cookie (see
+// AuthController.SignInUserAsync) to every outgoing request to NutriMind.API.
+// Web equivalent of NutriMind.Mobile/Services/Api/AuthHeaderHandler.cs — there the token comes
+// from ISecureStorageService, here it comes from the authenticated HttpContext via
+// IHttpContextAccessor because Web uses cookie auth and has no local storage of its own.
 public class AuthTokenHandler : DelegatingHandler
 {
     private readonly IHttpContextAccessor _httpContextAccessor;

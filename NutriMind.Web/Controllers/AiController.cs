@@ -17,9 +17,9 @@ public class AiController : Controller
 
     public IActionResult Chat() => View();
 
-    // Endpoint AJAX consumido por el fetch() en Views/Ai/Chat.cshtml — sin persistencia de
-    // historial en el servidor (conversación vive solo en el DOM), misma filosofía "sin
-    // dependencias extra" que site.js.
+    // AJAX endpoint consumed by the fetch() in Views/Ai/Chat.cshtml — no server-side history
+    // persistence (the conversation lives only in the DOM), same "no extra dependencies"
+    // philosophy as site.js.
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> ChatMessage([FromBody] ChatRequestDto request)

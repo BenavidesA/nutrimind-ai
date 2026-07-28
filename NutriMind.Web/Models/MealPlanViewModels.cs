@@ -9,8 +9,8 @@ public class MealPlanListViewModel
     public string? ErrorMessage { get; set; }
 }
 
-// Sin selector de alimentos/PlannedMeals — mismo patrón que NutriMind.Mobile/Views/MealPlans/
-// AddMealPlanPage (formulario simple, se crea con PlannedMeals vacío, que el backend acepta).
+// No food/PlannedMeals selector — same pattern as NutriMind.Mobile/Views/MealPlans/
+// AddMealPlanPage (simple form, created with an empty PlannedMeals, which the backend accepts).
 public class CreateMealPlanViewModel
 {
     [Required(ErrorMessage = "El nombre es obligatorio.")]

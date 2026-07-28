@@ -21,8 +21,8 @@ public class AuthController : Controller
     [HttpGet]
     public IActionResult Login()
     {
-        // Fase A todavía no tiene ninguna página protegida (dashboard, etc.) a la que redirigir
-        // si el usuario ya está autenticado — se agrega ese chequeo cuando exista esa página.
+        // Phase A doesn't have any protected page yet (dashboard, etc.) to redirect to
+        // if the user is already authenticated — that check will be added once such a page exists.
         return View(new LoginViewModel());
     }
 
@@ -74,8 +74,8 @@ public class AuthController : Controller
             return View(model);
         }
 
-        // RegisterAsync en el backend ya devuelve un AuthResponseDto (login automático tras
-        // registrarse), mismo comportamiento que ya tiene el móvil.
+        // RegisterAsync on the backend already returns an AuthResponseDto (automatic login after
+        // registering), same behavior the mobile app already has.
         await SignInUserAsync(result.Data);
 
         return RedirectToAction("Index", "Home");
@@ -91,8 +91,8 @@ public class AuthController : Controller
         if (!ModelState.IsValid)
             return View(model);
 
-        // El backend siempre responde éxito genérico exista o no la cuenta (anti-enumeración
-        // de usuarios) — el mensaje acá tampoco confirma si el correo está registrado.
+        // The backend always responds with a generic success whether the account exists or not
+        // (anti user-enumeration) — the message here doesn't confirm the email is registered either.
         await _authApiService.ForgotPasswordAsync(new ForgotPasswordRequestDto { Email = model.Email });
 
         return View("VerifyCode", new VerifyCodeViewModel { Email = model.Email });
@@ -152,8 +152,8 @@ public class AuthController : Controller
         var accessToken = User.FindFirst("access_token")?.Value;
         if (!string.IsNullOrEmpty(accessToken))
         {
-            // Revoca los refresh tokens en el servidor — si falla (ej. token ya vencido), igual
-            // cerramos la sesión local, no tiene sentido dejar al usuario atascado.
+            // Revokes the refresh tokens on the server — if it fails (e.g. token already expired),
+            // we still close the local session; there's no point leaving the user stuck.
             await _authApiService.LogoutAsync(accessToken);
         }
 

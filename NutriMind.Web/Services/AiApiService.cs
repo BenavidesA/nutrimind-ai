@@ -18,11 +18,11 @@ public class AiApiService : IAiApiService
         return await ApiResponseReader.ReadAsync<MealPlanResponseDto>(response, "La IA no pudo generar el plan de alimentación.");
     }
 
-    // AiController.Chat (API) devuelve { "reply": "..." } explícito (antes devolvía un string
-    // pelado que caía en StringOutputFormatter y salía como text/plain sin comillas, rompiendo
-    // cualquier ReadFromJsonAsync). Blindado con try/catch propio: si el body alguna vez no es
-    // JSON válido (cambio de contrato, error de infraestructura antes del controller, etc.), no
-    // dejamos que la excepción se propague sin manejar hasta el navegador.
+    // AiController.Chat (API) explicitly returns { "reply": "..." } (it used to return a bare
+    // string that fell through to StringOutputFormatter and came out as unquoted text/plain,
+    // breaking any ReadFromJsonAsync). Hardened with its own try/catch: if the body is ever not
+    // valid JSON (contract change, infrastructure error before the controller, etc.), we don't
+    // let the exception propagate unhandled all the way to the browser.
     public async Task<ApiResult<string>> ChatAsync(string message)
     {
         HttpResponseMessage response;

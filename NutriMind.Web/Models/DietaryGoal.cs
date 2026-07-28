@@ -1,7 +1,7 @@
 namespace NutriMind.Web.Models;
 
-// Copia de NutriMind.Domain.Enums.DietaryGoal — mismo orden (serializa como int en el JSON de
-// la API), Web no referencia Domain (proyecto desacoplado).
+// Copy of NutriMind.Domain.Enums.DietaryGoal — same order (serializes as int in the API's
+// JSON), Web doesn't reference Domain (decoupled project).
 public enum DietaryGoal
 {
     LoseWeight,

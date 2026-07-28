@@ -15,8 +15,8 @@ public class ChatRequestDto
     public string Message { get; set; } = string.Empty;
 }
 
-// Coincide con NutriMind.API.Controllers.ChatResponse — api/Ai/chat ahora devuelve
-// { "reply": "..." } en vez de un string JSON pelado (ver AiApiService.ChatAsync).
+// Matches NutriMind.API.Controllers.ChatResponse — api/Ai/chat now returns
+// { "reply": "..." } instead of a bare JSON string (see AiApiService.ChatAsync).
 public class ChatResponseDto
 {
     [JsonPropertyName("reply")]

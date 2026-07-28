@@ -6,13 +6,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpContextAccessor();
 
-// Header custom para el fetch() del chat de IA (Views/Ai/Chat.cshtml) — los formularios normales
-// siguen usando @Html.AntiForgeryToken() + el campo oculto por defecto sin tocar esto.
+// Custom header for the AI chat's fetch() (Views/Ai/Chat.cshtml) — regular forms still
+// use @Html.AntiForgeryToken() + the default hidden field, unaffected by this.
 builder.Services.AddAntiforgery(options => options.HeaderName = "X-CSRF-TOKEN");
 
-// --- HttpClient hacia NutriMind.API ---
-// Proyecto 100% desacoplado: solo consume la API por HTTP, no referencia
-// Domain/Application/Infrastructure (mismo patrón que NutriMind.Mobile).
+// --- HttpClient to NutriMind.API ---
+// 100% decoupled project: only consumes the API over HTTP, doesn't reference
+// Domain/Application/Infrastructure (same pattern as NutriMind.Mobile).
 var apiBaseUrl = builder.Configuration["ApiSettings:BaseUrl"]
     ?? throw new InvalidOperationException("ApiSettings:BaseUrl no está configurado.");
 
@@ -21,8 +21,8 @@ builder.Services.AddHttpClient<IAuthApiService, AuthApiService>(client =>
     client.BaseAddress = new Uri(apiBaseUrl);
 });
 
-// Endpoints autenticados (todo menos Auth): mismo HttpClient tipado, pero con
-// AuthTokenHandler adjuntando el Bearer token leído de la cookie de sesión.
+// Authenticated endpoints (everything except Auth): same typed HttpClient, but with
+// AuthTokenHandler attaching the Bearer token read from the session cookie.
 builder.Services.AddTransient<AuthTokenHandler>();
 
 builder.Services.AddHttpClient<IFoodLogApiService, FoodLogApiService>(client =>
@@ -50,9 +50,9 @@ builder.Services.AddHttpClient<IUserApiService, UserApiService>(client =>
     client.BaseAddress = new Uri(apiBaseUrl);
 }).AddHttpMessageHandler<AuthTokenHandler>();
 
-// --- Autenticación por cookie ---
-// El AccessToken/RefreshToken del JWT se guardan como claims dentro de esta misma cookie
-// (cifrada vía Data Protection, HttpOnly y Secure por defecto) — no se usan cookies separadas.
+// --- Cookie authentication ---
+// The JWT's AccessToken/RefreshToken are stored as claims inside this same cookie
+// (encrypted via Data Protection, HttpOnly and Secure by default) — no separate cookies are used.
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
@@ -62,9 +62,9 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.Cookie.HttpOnly = true;
         options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
         options.Cookie.SameSite = SameSiteMode.Lax;
-        // Igualamos la duración de la sesión a la vida del RefreshToken en el backend (30 días).
-        // El refresco silencioso del AccessToken vencido queda para cuando existan páginas
-        // protegidas que de verdad necesiten mantener la sesión viva con llamadas repetidas.
+        // We match the session duration to the RefreshToken's lifetime on the backend (30 days).
+        // Silent refresh of the expired AccessToken is left for when there are protected pages
+        // that truly need to keep the session alive through repeated calls.
         options.ExpireTimeSpan = TimeSpan.FromDays(30);
         options.SlidingExpiration = true;
     });

@@ -2,8 +2,8 @@ using System.Net.Http.Json;
 
 namespace NutriMind.Web.Services;
 
-// Misma lógica que los ReadResultAsync privados de AuthApiService, extraída para reusar en
-// todos los *ApiService nuevos sin duplicarla en cada uno.
+// Same logic as AuthApiService's private ReadResultAsync methods, extracted for reuse across
+// all the new *ApiService classes without duplicating it in each one.
 public static class ApiResponseReader
 {
     public static async Task<ApiResult<T>> ReadAsync<T>(HttpResponseMessage response, string defaultError)

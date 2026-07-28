@@ -69,7 +69,7 @@ public class EditFoodLogViewModel
 
 public static class MealTypes
 {
-    // Catálogo fijo (seed data, NutriMind.Infrastructure/Persistence/Configurations/
+    // Fixed catalog (seed data, NutriMind.Infrastructure/Persistence/Configurations/
     // MealTypeConfiguration.cs): 1=Breakfast, 2=Lunch, 3=Dinner, 4=Snack.
     public static readonly Dictionary<int, string> Names = new()
     {

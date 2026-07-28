@@ -19,8 +19,8 @@ public class HomeController : Controller
         _dashboardApiService = dashboardApiService;
     }
 
-    // Al tener [Authorize], un visitante sin cookie válida rebota automáticamente a
-    // options.LoginPath ("/Auth/Login") configurado en Program.cs, sin lógica manual acá.
+    // With [Authorize], a visitor without a valid cookie is automatically bounced to
+    // options.LoginPath ("/Auth/Login") configured in Program.cs, with no manual logic needed here.
     [Authorize]
     public async Task<IActionResult> Index()
     {
@@ -36,8 +36,8 @@ public class HomeController : Controller
             model.TotalPoints = progressResult.Data.TotalPoints;
         }
 
-        // Mismo límite de "hoy" que el resto de la app (ver AiController.Chat en la API):
-        // se compara por fecha local de Ecuador, no por DateTime.UtcNow.Date crudo.
+        // Same "today" boundary as the rest of the app (see AiController.Chat in the API):
+        // compared by Ecuador local date, not raw DateTime.UtcNow.Date.
         var today = EcuadorTimeHelper.ToLocal(DateTime.UtcNow).Date;
         var statsResult = await _dashboardApiService.GetStatsAsync(today, today);
         if (statsResult.IsSuccess)

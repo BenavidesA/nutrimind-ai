@@ -1,7 +1,7 @@
 namespace NutriMind.Web.Models;
 
-// Copia de NutriMind.Domain.Enums.ActivityLevel — mismo orden (serializa como int en el JSON de
-// la API), Web no referencia Domain (proyecto desacoplado).
+// Copy of NutriMind.Domain.Enums.ActivityLevel — same order (serializes as int in the API's
+// JSON), Web doesn't reference Domain (decoupled project).
 public enum ActivityLevel
 {
     Sedentary,
