@@ -82,6 +82,20 @@ public partial class LoginViewModel : ObservableObject
         }
     }
 
+    // Autocompleta las credenciales de demo@nutrimind.com (sembradas por la API al arrancar,
+    // ver Program.cs/SeedDemoDataAsync) y reutiliza el mismo flujo de LoginAsync — así un
+    // reclutador entra a la app sin tener que registrarse ni conocer ninguna credencial.
+    [RelayCommand]
+    private async Task LoginAsDemoAsync()
+    {
+        if (IsBusy) return;
+
+        Email = "demo@nutrimind.com";
+        Password = "Demo123!";
+
+        await LoginAsync();
+    }
+
     // NUEVO: Comando exclusivo para ir a la pantalla de registro
     [RelayCommand]
     private async Task GoToRegisterAsync()
