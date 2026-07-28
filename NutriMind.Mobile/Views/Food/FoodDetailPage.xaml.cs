@@ -2,7 +2,8 @@ using NutriMind.Mobile.ViewModels.Food;
 
 namespace NutriMind.Mobile.Views.Food;
 
-// THIS WAS THE BUG: it has to be "public partial class", not "private"
+// Must be "public partial class" — the XAML-generated partial (FoodDetailPage.xaml.g.cs)
+// declares this class as public, and C# requires matching accessibility across partial declarations.
 public partial class FoodDetailPage : ContentPage
 {
     public FoodDetailPage(FoodDetailViewModel viewModel)

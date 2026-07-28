@@ -3,13 +3,13 @@ using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using NutriMind.Mobile.Models.Food;
-using NutriMind.Mobile.Services.Api; // <-- Uncommented
+using NutriMind.Mobile.Services.Api;
 
 namespace NutriMind.Mobile.ViewModels.Food;
 
 public partial class FoodLogViewModel : ObservableObject
 {
-    private readonly IApiService _apiService; // <-- Now the real thing
+    private readonly IApiService _apiService;
 
     // Actual MealTypes IDs (seed data in MealTypeConfiguration.cs): 1=Breakfast, 2=Lunch,
     // 3=Dinner, 4=Snack. Grouped by ascending Id, which already gives the correct chronological order.

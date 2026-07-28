@@ -11,7 +11,8 @@ public partial class FoodLogPage : ContentPage
     {
         InitializeComponent();
 
-        // Definitive fix for the Handler error: access it via Application.Current
+        // Uses Application.Current instead of Handler directly, since Handler isn't
+        // guaranteed to be set yet when this parameterless constructor runs.
         var services = Application.Current?.Handler?.MauiContext?.Services;
         _viewModel = (services?.GetService(typeof(FoodLogViewModel)) as FoodLogViewModel)!;
 
