@@ -75,13 +75,13 @@
                     </Grid>
                 </Border>
 
-                <Label Text="CALORÍAS DIARIAS" FontFamily="SFProSemibold" FontSize="13" TextColor="{StaticResource TextSecondary}" Margin="4,0,0,8" />
+                <Label Text="CALORÍAS DIARIAS" FontFamily="OpenSansSemibold" FontSize="13" TextColor="{StaticResource TextSecondary}" Margin="4,0,0,8" />
                 <Border BackgroundColor="{AppThemeBinding Light={StaticResource BgCard}, Dark={StaticResource BgCardDark}}"
                         StrokeThickness="0" StrokeShape="RoundRectangle 16" Padding="16" Margin="0,0,0,28">
                     <microcharts:ChartView Chart="{Binding CaloriesBarChart}" HeightRequest="200" BackgroundColor="Transparent" />
                 </Border>
 
-                <Label Text="DISTRIBUCIÓN DE MACROS" FontFamily="SFProSemibold" FontSize="13" TextColor="{StaticResource TextSecondary}" Margin="4,0,0,8" />
+                <Label Text="DISTRIBUCIÓN DE MACROS" FontFamily="OpenSansSemibold" FontSize="13" TextColor="{StaticResource TextSecondary}" Margin="4,0,0,8" />
                 <Border BackgroundColor="{AppThemeBinding Light={StaticResource BgCard}, Dark={StaticResource BgCardDark}}"
                         StrokeThickness="0" StrokeShape="RoundRectangle 16" Padding="16" Margin="0,0,0,28">
                     <Grid ColumnDefinitions="*, *">
@@ -94,7 +94,7 @@
                     </Grid>
                 </Border>
 
-                <Label Text="RESUMEN DEL PERÍODO" FontFamily="SFProSemibold" FontSize="13" TextColor="{StaticResource TextSecondary}" Margin="4,0,0,8" />
+                <Label Text="RESUMEN DEL PERÍODO" FontFamily="OpenSansSemibold" FontSize="13" TextColor="{StaticResource TextSecondary}" Margin="4,0,0,8" />
                 <Grid ColumnDefinitions="*,*,*" ColumnSpacing="12" Margin="0,0,0,28">
                     <Border Grid.Column="0" BackgroundColor="{AppThemeBinding Light={StaticResource BgCard}, Dark={StaticResource BgCardDark}}" StrokeThickness="0" StrokeShape="RoundRectangle 12" Padding="12">
                         <VerticalStackLayout>
@@ -116,7 +116,7 @@
                     </Border>
                 </Grid>
 
-                <Label Text="REGISTRO DIARIO" FontFamily="SFProSemibold" FontSize="13" TextColor="{StaticResource TextSecondary}" Margin="4,0,0,8" />
+                <Label Text="REGISTRO DIARIO" FontFamily="OpenSansSemibold" FontSize="13" TextColor="{StaticResource TextSecondary}" Margin="4,0,0,8" />
                 <Border BackgroundColor="{AppThemeBinding Light={StaticResource BgCard}, Dark={StaticResource BgCardDark}}" StrokeThickness="0" StrokeShape="RoundRectangle 12" Padding="0">
                     <StackLayout BindableLayout.ItemsSource="{Binding DailySummaries}" Spacing="0">
                         <BindableLayout.ItemTemplate>

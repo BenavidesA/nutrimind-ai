@@ -30,7 +30,7 @@
                     <VerticalStackLayout Spacing="8">
                         <HorizontalStackLayout Spacing="8">
                             <Image Source="logo.png" WidthRequest="24" HeightRequest="24" VerticalOptions="Center"/>
-                            <Label Text="NutriMind AI" FontSize="17" FontFamily="SFProSemibold" TextColor="{StaticResource TextPrimary}" VerticalOptions="Center"/>
+                            <Label Text="NutriMind AI" FontSize="17" FontFamily="OpenSansSemibold" TextColor="{StaticResource TextPrimary}" VerticalOptions="Center"/>
                         </HorizontalStackLayout>
                         <Label Text="Hola, soy tu asistente nutricional. ¿En qué puedo ayudarte hoy?" FontSize="15" TextColor="{StaticResource TextSecondary}" LineBreakMode="WordWrap"/>
                     </VerticalStackLayout>
@@ -101,7 +101,7 @@
                            ReturnCommand="{Binding SendMessageCommand}" />
                 </Border>
                 <Button Grid.Column="1" Text="Enviar" BackgroundColor="{StaticResource PrimaryBlue}" TextColor="White" 
-                        FontFamily="SFProSemibold" CornerRadius="20" HeightRequest="40" Padding="15,0"
+                        FontFamily="OpenSansSemibold" CornerRadius="20" HeightRequest="40" Padding="15,0"
                         Command="{Binding SendMessageCommand}" />
             </Grid>
         </Border>
