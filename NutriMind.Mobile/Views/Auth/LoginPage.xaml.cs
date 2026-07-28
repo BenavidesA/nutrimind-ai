@@ -6,8 +6,8 @@ public partial class LoginPage : ContentPage
 {
     private readonly LoginViewModel _viewModel;
 
-    // Constructor sin parámetros (exigido por Shell/Routing: AppShell.xaml instancia esta
-    // página vía {DataTemplate auth:LoginPage}, que requiere un constructor vacío).
+    // Parameterless constructor (required by Shell/Routing: AppShell.xaml instantiates this
+    // page via {DataTemplate auth:LoginPage}, which requires an empty constructor).
     public LoginPage()
     {
         InitializeComponent();
@@ -18,7 +18,7 @@ public partial class LoginPage : ContentPage
         BindingContext = _viewModel;
     }
 
-    // Constructor con inyección de dependencias directa
+    // Constructor with direct dependency injection
     public LoginPage(LoginViewModel viewModel)
     {
         InitializeComponent();

@@ -19,7 +19,7 @@ public interface IApiService
     Task<bool> ResetPasswordAsync(string email, string code, string newPassword);
     Task<bool> ChangePasswordAsync(string currentPassword, string newPassword);
 
-    // Recuerda crear un DTO equivalente en el móvil o usar tipos dinámicos/clases básicas por ahora
+    // Remember to create an equivalent DTO on mobile, or use dynamic types/basic classes for now
     Task<string> GenerateMealPlanAsync(object request);
     Task<string> SendChatMessageAsync(string message);
 

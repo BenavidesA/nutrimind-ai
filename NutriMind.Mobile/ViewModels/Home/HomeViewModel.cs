@@ -144,8 +144,8 @@ public partial class HomeViewModel : ObservableObject
             BackgroundColor = SKColors.Transparent,
             HoleRadius = 0.6f,
             LabelTextSize = 30,
-            // Se desactivan las captions nativas (dibujaban una leyenda izquierda/derecha
-            // desalineada) — la leyenda real la arma HomePage.xaml a mano, mismo patrón que
+            // Native captions are disabled (they drew a misaligned left/right
+            // legend) — the actual legend is built by hand in HomePage.xaml, same pattern as
             // HistoryPage.
             LabelMode = LabelMode.None
         };

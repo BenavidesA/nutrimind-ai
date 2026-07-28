@@ -1,7 +1,7 @@
 namespace NutriMind.Mobile.Models.Profile;
 
-// El orden de estos miembros debe coincidir EXACTO con NutriMind.Domain.Enums.DietaryGoal
-// (ver nota en ActivityLevel.cs sobre serialización de enums como enteros).
+// The order of these members must match NutriMind.Domain.Enums.DietaryGoal EXACTLY
+// (see note in ActivityLevel.cs about serializing enums as integers).
 public enum DietaryGoal
 {
     LoseWeight,

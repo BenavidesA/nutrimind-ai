@@ -6,19 +6,19 @@ public partial class FoodLogPage : ContentPage
 {
     private readonly FoodLogViewModel _viewModel;
 
-    // Constructor sin parámetros (Exigido por Shell / Routing)
+    // Parameterless constructor (required by Shell / Routing)
     public FoodLogPage()
     {
         InitializeComponent();
 
-        // Solución definitiva al error de Handler: Accedemos desde Application.Current
+        // Definitive fix for the Handler error: access it via Application.Current
         var services = Application.Current?.Handler?.MauiContext?.Services;
         _viewModel = (services?.GetService(typeof(FoodLogViewModel)) as FoodLogViewModel)!;
 
         BindingContext = _viewModel;
     }
 
-    // Constructor con Inyección de Dependencias (Principal)
+    // Constructor with Dependency Injection (main)
     public FoodLogPage(FoodLogViewModel viewModel)
     {
         InitializeComponent();
@@ -30,7 +30,7 @@ public partial class FoodLogPage : ContentPage
     {
         base.OnAppearing();
 
-        // Obligamos a recargar la lista desde la base de datos SIEMPRE que esta pantalla aparezca
+        // Force the list to reload from the database every time this screen appears
         _viewModel?.LoadFoodsCommand.Execute(null);
     }
 }

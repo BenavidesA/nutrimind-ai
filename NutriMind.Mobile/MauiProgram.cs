@@ -39,22 +39,22 @@ public static class MauiProgram
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-                // Alias usado como FontFamily="MaterialOutlined" en LoginPage/RegisterPage/
-                // HomePage/etc. para los glyphs de íconos (correo, candado, ojo...). El
-                // archivo en sí (MaterialIconsOutlined-Regular.ttf) todavía no existe en
-                // Resources/Fonts — sin él, MAUI cae a una fuente de reemplazo que mapea esos
-                // mismos codepoints de Private Use Area a caracteres CJK, por eso se ven como
-                // chino en vez de íconos.
+                // Alias used as FontFamily="MaterialOutlined" in LoginPage/RegisterPage/
+                // HomePage/etc. for icon glyphs (email, lock, eye...). The
+                // file itself (MaterialIconsOutlined-Regular.ttf) does not yet exist in
+                // Resources/Fonts — without it, MAUI falls back to a replacement font that maps
+                // those same Private Use Area codepoints to CJK characters, which is why they
+                // show up as Chinese instead of icons.
                 fonts.AddFont("MaterialIconsOutlined-Regular.ttf", "MaterialOutlined");
             });
 
 #if ANDROID
-        // El framework de Autofill de Android pinta un resaltado amarillo sobre el Entry
-        // nativo que Entry.BackgroundColor no puede sobrescribir (se dibuja por debajo del
-        // control). Se desactiva a nivel de EditText nativo para todos los Entry de la app.
-        // También se limpia el drawable de fondo nativo: cuando BackgroundColor="Transparent",
-        // MAUI no siempre reemplaza el underline por defecto del EditText de Android, dejando
-        // una línea residual visible sobre fondos custom (ej. las tarjetas grises de inputs).
+        // The Android Autofill framework paints a yellow highlight over the native Entry
+        // that Entry.BackgroundColor cannot override (it is drawn underneath the
+        // control). It is disabled at the native EditText level for every Entry in the app.
+        // The native background drawable is also cleared: when BackgroundColor="Transparent",
+        // MAUI does not always replace Android's default EditText underline, leaving
+        // a residual line visible over custom backgrounds (e.g. the gray input cards).
         Microsoft.Maui.Handlers.EntryHandler.Mapper.AppendToMapping("DisableAutofillHighlight", (handler, view) =>
         {
             handler.PlatformView.ImportantForAutofill = Android.Views.ImportantForAutofill.NoExcludeDescendants;
@@ -74,7 +74,7 @@ public static class MauiProgram
         builder.Services.AddTransient<LoginViewModel>();
 
 
-        // Registrar el manejador de autenticación
+        // Register the authentication handler
         builder.Services.AddTransient<AuthHeaderHandler>();
 
         builder.Services.AddHttpClient<IApiService, ApiService>(client =>
@@ -85,8 +85,8 @@ public static class MauiProgram
         {
             var handler = new HttpClientHandler();
 #if DEBUG
-            // Solo en builds de depuración: acepta el certificado autofirmado del servidor
-            // local de desarrollo. Esto nunca debe compilarse en un build de Release/Store.
+            // Debug builds only: accepts the self-signed certificate from the
+            // local development server. This must never ship in a Release/Store build.
             handler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true;
 #endif
             return handler;

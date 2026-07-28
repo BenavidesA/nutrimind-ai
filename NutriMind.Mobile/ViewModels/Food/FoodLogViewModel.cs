@@ -3,16 +3,16 @@ using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using NutriMind.Mobile.Models.Food;
-using NutriMind.Mobile.Services.Api; // <-- Descomentado
+using NutriMind.Mobile.Services.Api; // <-- Uncommented
 
 namespace NutriMind.Mobile.ViewModels.Food;
 
 public partial class FoodLogViewModel : ObservableObject
 {
-    private readonly IApiService _apiService; // <-- Ya es real
+    private readonly IApiService _apiService; // <-- Now the real thing
 
-    // IDs reales de MealTypes (seed data en MealTypeConfiguration.cs): 1=Breakfast, 2=Lunch,
-    // 3=Dinner, 4=Snack. Se agrupa por Id ascendente, que ya da el orden cronológico correcto.
+    // Actual MealTypes IDs (seed data in MealTypeConfiguration.cs): 1=Breakfast, 2=Lunch,
+    // 3=Dinner, 4=Snack. Grouped by ascending Id, which already gives the correct chronological order.
     private static readonly Dictionary<int, string> MealTypeNames = new()
     {
         { 1, "Desayuno" },
@@ -76,9 +76,9 @@ public partial class FoodLogViewModel : ObservableObject
     {
         if (food is null) return;
 
-        // Borrado optimista: quitamos el item de su grupo (o el grupo entero si queda vacío)
-        // reemplazando la instancia de FoodGroup para que el ObservableCollection notifique el
-        // cambio — FoodGroup es un List<T> plano, no reacciona a mutaciones in-place.
+        // Optimistic delete: remove the item from its group (or the entire group if it ends up
+        // empty) by replacing the FoodGroup instance so the ObservableCollection notifies the
+        // change — FoodGroup is a plain List<T>, it does not react to in-place mutations.
         var group = GroupedFoods.FirstOrDefault(g => g.Contains(food));
         var groupIndex = group != null ? GroupedFoods.IndexOf(group) : -1;
 
@@ -93,7 +93,7 @@ public partial class FoodLogViewModel : ObservableObject
 
         try
         {
-            // Parseamos el string a Guid de forma segura para la firma de la API
+            // Safely parse the string to a Guid to match the API signature
             if (Guid.TryParse(food.Id, out Guid foodGuid))
             {
                 await _apiService.DeleteFoodAsync(foodGuid);
@@ -101,8 +101,8 @@ public partial class FoodLogViewModel : ObservableObject
         }
         catch
         {
-            // Si falló, recargamos desde el servidor en vez de intentar reinsertar el item a
-            // mano en la posición/grupo exactos.
+            // If it failed, reload from the server instead of trying to manually reinsert
+            // the item at the exact position/group.
             await LoadFoodsAsync();
             await Shell.Current.DisplayAlert("Error", "No se pudo borrar el elemento del servidor.", "OK");
         }

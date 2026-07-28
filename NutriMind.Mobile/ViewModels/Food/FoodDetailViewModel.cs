@@ -7,7 +7,7 @@ namespace NutriMind.Mobile.ViewModels.Food;
 [QueryProperty(nameof(Food), "FoodData")]
 public partial class FoodDetailViewModel : ObservableObject
 {
-    // Cambia la línea de la propiedad por esta:
+    // Replace the property line with this one:
     [ObservableProperty]
     private FoodItemDto food = new();
 

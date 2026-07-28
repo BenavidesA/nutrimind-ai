@@ -69,7 +69,7 @@ public partial class LoginViewModel : ObservableObject
             await _secureStorageService.SaveUserIdAsync(result.UserId);
             await _secureStorageService.SaveUserNameAsync(result.FirstName, result.LastName);
 
-            // Redirige al Home (Eliminé la redirección errónea al registro aquí)
+            // Redirects to Home (removed the incorrect redirect to registration here)
             await Shell.Current.GoToAsync("//home");
         }
         catch (Exception ex)
@@ -82,9 +82,9 @@ public partial class LoginViewModel : ObservableObject
         }
     }
 
-    // Autocompleta las credenciales de demo@nutrimind.com (sembradas por la API al arrancar,
-    // ver Program.cs/SeedDemoDataAsync) y reutiliza el mismo flujo de LoginAsync — así un
-    // reclutador entra a la app sin tener que registrarse ni conocer ninguna credencial.
+    // Auto-fills the demo@nutrimind.com credentials (seeded by the API on startup,
+    // see Program.cs/SeedDemoDataAsync) and reuses the same LoginAsync flow — this way a
+    // recruiter can enter the app without registering or knowing any credentials.
     [RelayCommand]
     private async Task LoginAsDemoAsync()
     {
@@ -96,7 +96,7 @@ public partial class LoginViewModel : ObservableObject
         await LoginAsync();
     }
 
-    // NUEVO: Comando exclusivo para ir a la pantalla de registro
+    // NEW: Dedicated command to navigate to the registration screen
     [RelayCommand]
     private async Task GoToRegisterAsync()
     {

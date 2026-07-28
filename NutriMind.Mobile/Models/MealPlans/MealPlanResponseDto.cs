@@ -12,8 +12,8 @@ public class MealPlanResponseDto
     public bool IsAIGenerated { get; set; }
     public List<PlannedMealDto> PlannedMeals { get; set; } = new();
 
-    // Calculado en el momento de bindear, no viene del backend — mismo patrón que
-    // DailySummaryDto.GoalAchieved. Usa hora Ecuador, no UTC crudo.
+    // Calculated at binding time, not returned by the backend — same pattern as
+    // DailySummaryDto.GoalAchieved. Uses Ecuador time, not raw UTC.
     public bool IsActive
     {
         get

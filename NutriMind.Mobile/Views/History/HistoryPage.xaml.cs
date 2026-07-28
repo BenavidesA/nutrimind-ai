@@ -6,7 +6,7 @@ public partial class HistoryPage : ContentPage
 {
     private readonly HistoryViewModel _viewModel;
 
-    // Constructor sin parámetros (fallback si Shell instancia sin pasar por DI)
+    // Parameterless constructor (fallback if Shell instantiates without going through DI)
     public HistoryPage()
     {
         InitializeComponent();
@@ -17,7 +17,7 @@ public partial class HistoryPage : ContentPage
         BindingContext = _viewModel;
     }
 
-    // Constructor con Inyección de Dependencias (Principal)
+    // Constructor with Dependency Injection (Primary)
     public HistoryPage(HistoryViewModel viewModel)
     {
         InitializeComponent();

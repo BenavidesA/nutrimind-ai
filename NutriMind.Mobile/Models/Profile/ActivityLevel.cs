@@ -1,8 +1,8 @@
 namespace NutriMind.Mobile.Models.Profile;
 
-// El orden de estos miembros debe coincidir EXACTO con NutriMind.Domain.Enums.ActivityLevel:
-// el backend serializa enums como enteros (no hay JsonStringEnumConverter configurado),
-// así que un orden distinto aquí haría que los valores se interpreten mal en silencio.
+// The order of these members must match NutriMind.Domain.Enums.ActivityLevel EXACTLY:
+// the backend serializes enums as integers (no JsonStringEnumConverter configured),
+// so a different order here would cause values to be silently misinterpreted.
 public enum ActivityLevel
 {
     Sedentary,

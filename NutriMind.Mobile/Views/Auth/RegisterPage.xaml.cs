@@ -6,7 +6,7 @@ public partial class RegisterPage : ContentPage
 {
     private readonly RegisterViewModel _viewModel;
 
-    // Constructor vacío para respaldo del sistema de enrutamiento
+    // Parameterless constructor as a fallback for the routing system
     public RegisterPage()
     {
         InitializeComponent();
@@ -14,7 +14,7 @@ public partial class RegisterPage : ContentPage
         BindingContext = _viewModel;
     }
 
-    // Constructor principal con inyección de dependencias
+    // Main constructor with dependency injection
     public RegisterPage(RegisterViewModel viewModel)
     {
         InitializeComponent();

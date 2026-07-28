@@ -46,8 +46,8 @@ public partial class ForgotPasswordViewModel : ObservableObject
         {
             IsBusy = true;
             await _apiService.ForgotPasswordAsync(Email);
-            // El backend siempre responde éxito genérico exista o no la cuenta (anti-enumeración),
-            // así que el mensaje acá tampoco confirma si el correo está registrado.
+            // The backend always responds with generic success whether or not the account exists
+            // (anti-enumeration), so this message doesn't confirm the email is registered either.
             await Shell.Current.DisplayAlert("Listo", "Si el correo está registrado, te enviamos un código de verificación.", "OK");
             CurrentStep = 2;
         }

@@ -16,9 +16,9 @@ public partial class HistoryViewModel : ObservableObject
     private readonly IApiService _apiService;
     private readonly ILogger<HistoryViewModel> _logger;
 
-    // Meta calórica temporal: todavía no existe un endpoint que exponga la meta real del
-    // usuario (NutritionGoal.TargetCalories no está expuesto al móvil). 2000 kcal/día es el
-    // mismo valor por defecto que ya usa AIAssistantViewModel al generar un plan de IA.
+    // Temporary calorie goal: there is no endpoint yet that exposes the user's actual
+    // goal (NutritionGoal.TargetCalories is not exposed to mobile). 2000 kcal/day is the
+    // same default value AIAssistantViewModel already uses when generating an AI plan.
     private const decimal DefaultCaloriesGoal = 2000m;
 
     [ObservableProperty]
@@ -81,9 +81,9 @@ public partial class HistoryViewModel : ObservableObject
 
         try
         {
-            // "Hoy" se calcula en hora Ecuador (UTC-5 fijo), no en UTC crudo: entre ~7pm y
-            // medianoche hora Ecuador, DateTime.UtcNow.Date ya cayó en el día siguiente y
-            // dejaba fuera los registros de esa noche.
+            // "Today" is calculated in Ecuador time (fixed UTC-5), not raw UTC: between ~7pm and
+            // midnight Ecuador time, DateTime.UtcNow.Date had already rolled over to the next
+            // day and was leaving out that night's logs.
             var today = EcuadorTimeHelper.ToLocal(DateTime.UtcNow).Date;
             var startDate = today.AddDays(-(SelectedDaysBack - 1));
 
@@ -93,8 +93,8 @@ public partial class HistoryViewModel : ObservableObject
             for (var i = 0; i < SelectedDaysBack; i++)
             {
                 var day = startDate.AddDays(i);
-                // LogDate viene en UTC crudo desde el backend — hay que convertirlo a hora
-                // Ecuador antes de agrupar por día, igual que "today" arriba.
+                // LogDate comes in raw UTC from the backend — it must be converted to Ecuador
+                // time before grouping by day, same as "today" above.
                 var dayLogs = logs.Where(l => EcuadorTimeHelper.ToLocal(l.LogDate).Date == day).ToList();
 
                 summaries.Add(new DailySummaryDto
@@ -130,7 +130,7 @@ public partial class HistoryViewModel : ObservableObject
 
     private void UpdateCharts(List<DailySummaryDto> summaries)
     {
-        // 1. Gráfico de Barras (Calorías por día, datos reales)
+        // 1. Bar Chart (Calories per day, real data)
         CaloriesBarChart = new BarChart
         {
             Entries = summaries.Select(s => new ChartEntry((float)s.TotalCalories)
@@ -143,7 +143,7 @@ public partial class HistoryViewModel : ObservableObject
             BackgroundColor = SKColors.Transparent
         };
 
-        // 2. Gráfico de Donut (Macros reales, sumados sobre los 7 días)
+        // 2. Donut Chart (Real macros, summed over the 7 days)
         var totalProtein = summaries.Sum(s => s.TotalProtein);
         var totalCarbs = summaries.Sum(s => s.TotalCarbs);
         var totalFat = summaries.Sum(s => s.TotalFat);

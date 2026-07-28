@@ -19,7 +19,7 @@ public partial class AIAssistantViewModel : ObservableObject
     public ObservableCollection<ChatMessageDto> Messages { get; } = new();
     public ObservableCollection<string> SuggestionChips { get; } = new();
 
-    // Inyectamos el ApiService mediante el constructor
+    // Inject the ApiService via the constructor
     public AIAssistantViewModel(IApiService apiService)
     {
         _apiService = apiService;
@@ -41,10 +41,10 @@ public partial class AIAssistantViewModel : ObservableObject
         var userMsg = CurrentMessage.Trim();
         CurrentMessage = string.Empty;
 
-        // 1. Agregar mensaje del usuario a la UI
+        // 1. Add the user's message to the UI
         Messages.Add(new ChatMessageDto { Role = "user", Content = userMsg });
 
-        // 2. Encender el texto de "escribiendo..."
+        // 2. Turn on the "typing..." text
         IsTyping = true;
 
         try
@@ -58,22 +58,22 @@ public partial class AIAssistantViewModel : ObservableObject
             }
             else
             {
-                // Pregunta de chat normal
+                // Regular chat question
                 responseContent = await _apiService.SendChatMessageAsync(userMsg);
             }
 
-            // 3. Imprimir respuesta
+            // 3. Print the response
             Messages.Add(new ChatMessageDto { Role = "assistant", Content = responseContent ?? "Sin respuesta." });
         }
         catch (Exception ex)
         {
-            // Mostramos el mensaje/código real del error en vez de uno genérico,
-            // para poder diagnosticar fallos del backend (ej. plan de IA que no se guarda).
+            // We show the real error message/code instead of a generic one,
+            // so backend failures can be diagnosed (e.g. an AI plan that fails to save).
             Messages.Add(new ChatMessageDto { Role = "assistant", Content = $"Error: {ex.Message}" });
         }
         finally
         {
-            // 4. EL BLOQUE FINALLY: Apaga el texto de "escribiendo..." sin importar si falló o fue un éxito
+            // 4. THE FINALLY BLOCK: Turns off the "typing..." text regardless of success or failure
             MainThread.BeginInvokeOnMainThread(() =>
             {
                 IsTyping = false;

@@ -1,26 +1,26 @@
 namespace NutriMind.Mobile.Helpers;
 
-// Copia del helper equivalente en NutriMind.Application/Common/EcuadorTimeHelper.cs — Mobile no
-// referencia Application (proyecto desacoplado, solo consume la API por HTTP), así que no se
-// puede compartir la clase directamente. Ecuador usa un offset fijo de UTC-5 todo el año (no
-// observa horario de verano/DST), por lo que sumar/restar horas fijas es seguro.
+// Copy of the equivalent helper in NutriMind.Application/Common/EcuadorTimeHelper.cs — Mobile does
+// not reference Application (decoupled project, only consumes the API over HTTP), so the class
+// cannot be shared directly. Ecuador uses a fixed UTC-5 offset year-round (it does not
+// observe daylight saving time/DST), so adding/subtracting fixed hours is safe.
 public static class EcuadorTimeHelper
 {
     private static readonly TimeSpan Offset = TimeSpan.FromHours(-5);
 
     public static DateTime ToLocal(DateTime utc) => utc.Add(Offset);
 
-    // Auto-detecta el tipo de comida según la hora local de Ecuador al momento de registrar.
-    // IDs reales de MealTypes (seed data, NutriMind.Infrastructure/Persistence/Configurations/
+    // Auto-detects the meal type based on Ecuador local time at the moment of logging.
+    // Actual MealTypes IDs (seed data, NutriMind.Infrastructure/Persistence/Configurations/
     // MealTypeConfiguration.cs): 1=Breakfast, 2=Lunch, 3=Dinner, 4=Snack.
     public static int GetMealTypeIdForNow()
     {
         var hour = ToLocal(DateTime.UtcNow).Hour;
         return hour switch
         {
-            >= 5 and < 11 => 1,  // Desayuno
-            >= 11 and < 16 => 2, // Almuerzo
-            >= 16 and < 21 => 3, // Cena
+            >= 5 and < 11 => 1,  // Breakfast
+            >= 11 and < 16 => 2, // Lunch
+            >= 16 and < 21 => 3, // Dinner
             _ => 4                // Snack
         };
     }

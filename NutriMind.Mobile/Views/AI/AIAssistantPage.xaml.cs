@@ -6,7 +6,7 @@ public partial class AIAssistantPage : ContentPage
 {
     private readonly AIAssistantViewModel _viewModel;
 
-    // Constructor sin parámetros (Shell lo instancia así al ser <ShellContent>)
+    // Parameterless constructor (Shell instantiates it this way as a <ShellContent>)
     public AIAssistantPage()
     {
         InitializeComponent();
@@ -15,7 +15,7 @@ public partial class AIAssistantPage : ContentPage
         BindingContext = _viewModel;
     }
 
-    // Constructor con inyección de dependencias (por si se navega directo, no solo vía Shell)
+    // Constructor with dependency injection (in case of direct navigation, not just via Shell)
     public AIAssistantPage(AIAssistantViewModel viewModel)
     {
         InitializeComponent();

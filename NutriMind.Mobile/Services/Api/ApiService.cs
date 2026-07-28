@@ -159,10 +159,10 @@ public class ApiService : IApiService
 
             if (response.IsSuccessStatusCode)
             {
-                // El endpoint ahora devuelve JSON explícito { "reply": "..." } en vez de un
-                // string pelado (antes ReadAsStringAsync devolvía el texto crudo tal cual porque
-                // el formateador de ASP.NET Core mandaba text/plain sin comillas para un string
-                // suelto; eso rompía a NutriMind.Web, que sí espera JSON — ver ChatResponseDto).
+                // The endpoint now returns explicit JSON { "reply": "..." } instead of a
+                // bare string (previously ReadAsStringAsync returned the raw text as-is because
+                // the ASP.NET Core formatter sent unquoted text/plain for a loose string;
+                // that broke NutriMind.Web, which does expect JSON — see ChatResponseDto).
                 var payload = await response.Content.ReadFromJsonAsync<ChatResponseDto>();
                 return payload?.Reply ?? "Sin respuesta.";
             }

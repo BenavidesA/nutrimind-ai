@@ -1,7 +1,7 @@
 namespace NutriMind.Mobile.Models.Food;
 
-// Grupo simple para el CollectionView agrupado de FoodLogPage — se reconstruye completo en
-// cada carga, no reacciona a cambios in-place (no hace falta, ver FoodLogViewModel.LoadFoodsAsync).
+// Simple group for FoodLogPage's grouped CollectionView — fully rebuilt on every load,
+// doesn't react to in-place changes (not needed, see FoodLogViewModel.LoadFoodsAsync).
 public class FoodGroup : List<FoodItemDto>
 {
     public string MealTypeName { get; }

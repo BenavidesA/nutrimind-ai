@@ -45,7 +45,7 @@ public partial class RegisterViewModel : ObservableObject
     {
         if (IsBusy) return;
 
-        // Validaciones básicas antes de golpear la API
+        // Basic validations before hitting the API
         if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
         {
             await Shell.Current.DisplayAlert("Campos Vacíos", "Por favor completa todos los campos requeridos.", "OK");
@@ -66,16 +66,16 @@ public partial class RegisterViewModel : ObservableObject
             {
                 Email = Email,
                 Password = Password
-                // Agrega campos adicionales aquí si tu modelo RegisterRequest los requiere (ej. Username)
+                // Add additional fields here if your RegisterRequest model requires them (e.g. Username)
             };
 
-            // Llamada real al servicio HTTP de tu ApiService.cs
+            // Actual call to the HTTP service in your ApiService.cs
             var result = await _apiService.RegisterAsync(registerRequest);
 
             if (result != null)
             {
                 await Shell.Current.DisplayAlert("¡Éxito!", "Tu cuenta ha sido creada correctamente.", "OK");
-                // Regresa de forma automática al Login
+                // Automatically goes back to Login
                 await Shell.Current.GoToAsync("..");
             }
             else
@@ -96,7 +96,7 @@ public partial class RegisterViewModel : ObservableObject
     [RelayCommand]
     private async Task GoBackAsync()
     {
-        // Resuelve de inmediato la redirección de "Ya tengo cuenta"
+        // Immediately resolves the "I already have an account" redirect
         await Shell.Current.GoToAsync("..");
     }
 }

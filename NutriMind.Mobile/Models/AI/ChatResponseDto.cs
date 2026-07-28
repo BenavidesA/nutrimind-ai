@@ -2,8 +2,8 @@ using System.Text.Json.Serialization;
 
 namespace NutriMind.Mobile.Models.AI;
 
-// Coincide con NutriMind.API.Controllers.ChatResponse — api/Ai/chat ahora devuelve
-// { "reply": "..." } explícito en vez de un string JSON pelado (ver ApiService.SendChatMessageAsync).
+// Matches NutriMind.API.Controllers.ChatResponse — api/Ai/chat now returns
+// an explicit { "reply": "..." } instead of a bare JSON string (see ApiService.SendChatMessageAsync).
 public sealed class ChatResponseDto
 {
     [JsonPropertyName("reply")]

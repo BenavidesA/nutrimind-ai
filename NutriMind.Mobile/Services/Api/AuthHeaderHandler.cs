@@ -14,16 +14,16 @@ public class AuthHeaderHandler : DelegatingHandler
 
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
-        // 1. Intentamos obtener el token guardado en el dispositivo
+        // 1. Try to get the token stored on the device
         var token = await _storageService.GetTokenAsync();
 
-        // 2. Si el token existe, lo inyectamos en la cabecera de la petición
+        // 2. If the token exists, inject it into the request header
         if (!string.IsNullOrEmpty(token))
         {
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
         }
 
-        // 3. Continuamos con la petición de forma normal
+        // 3. Continue with the request normally
         return await base.SendAsync(request, cancellationToken);
     }
 }
