@@ -1,17 +1,49 @@
 services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: ${DB_SA_PASSWORD}
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssql_data:/var/opt/mssql
+    healthcheck:
+      # Prueba primero mssql-tools18 (imagen 2022, sqlcmd exige -C para confiar en el
+      # certificado autofirmado) y cae a mssql-tools si esa ruta no existe en la imagen
+      # que se descargue. depends_on de la API espera a que esto pase, no solo a que el
+      # contenedor arranque — SQL Server tarda varios segundos en aceptar conexiones.
+      test: [
+        "CMD-SHELL",
+        "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P \"$$MSSQL_SA_PASSWORD\" -C -Q 'SELECT 1' -b -o /dev/null || /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P \"$$MSSQL_SA_PASSWORD\" -Q 'SELECT 1' -b -o /dev/null"
+      ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
   api:
     build:
       context: .
       dockerfile: NutriMind.API/Dockerfile
     ports:
       - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
     environment:
       ASPNETCORE_URLS: http://+:8080
       # Program.cs exige estos valores al arrancar (lanza InvalidOperationException si
       # faltan) — no hay .env en el repo por diseño (está en .gitignore). Copia
       # ".env.example" a ".env" y completa los valores reales antes de "docker-compose up".
-      ConnectionStrings__DefaultConnection: ${CONNECTION_STRING}
+      # "db" es el nombre del servicio de arriba; Docker lo resuelve como host vía su DNS
+      # interno, y comparte la misma contraseña que MSSQL_SA_PASSWORD (una sola fuente de
+      # verdad, sin riesgo de que la API y el contenedor de la base de datos se desincronicen).
+      ConnectionStrings__DefaultConnection: Server=db,1433;Database=NutriMindDb;User Id=sa;Password=${DB_SA_PASSWORD};TrustServerCertificate=True
       JwtSettings__SecretKey: ${JWT_SECRET_KEY}
       GeminiSettings__ApiKey: ${GEMINI_API_KEY}
       ResendSettings__ApiKey: ${RESEND_API_KEY}
       ResendSettings__DevRedirectEmail: ${RESEND_DEV_REDIRECT_EMAIL}
+
+volumes:
+  mssql_data:
