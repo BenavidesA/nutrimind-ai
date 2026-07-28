@@ -39,6 +39,13 @@ public static class MauiProgram
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+                // Alias usado como FontFamily="MaterialOutlined" en LoginPage/RegisterPage/
+                // HomePage/etc. para los glyphs de íconos (correo, candado, ojo...). El
+                // archivo en sí (MaterialIconsOutlined-Regular.ttf) todavía no existe en
+                // Resources/Fonts — sin él, MAUI cae a una fuente de reemplazo que mapea esos
+                // mismos codepoints de Private Use Area a caracteres CJK, por eso se ven como
+                // chino en vez de íconos.
+                fonts.AddFont("MaterialIconsOutlined-Regular.ttf", "MaterialOutlined");
             });
 
 #if ANDROID
