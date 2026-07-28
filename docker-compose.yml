@@ -33,6 +33,9 @@ services:
         condition: service_healthy
     environment:
       ASPNETCORE_URLS: http://+:8080
+      # Habilita Swagger UI (Program.cs solo lo mapea si IsDevelopment() es true) para poder
+      # explorar/probar la API local desde el navegador y desde la app móvil apuntando aquí.
+      ASPNETCORE_ENVIRONMENT: Development
       # Program.cs exige estos valores al arrancar (lanza InvalidOperationException si
       # faltan) — no hay .env en el repo por diseño (está en .gitignore). Copia
       # ".env.example" a ".env" y completa los valores reales antes de "docker-compose up".
