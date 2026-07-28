@@ -1,3 +1,4 @@
+using System.Net;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,8 @@ using NutriMind.Infrastructure.Persistence;
 using NutriMind.Infrastructure.Persistence.Context;
 using NutriMind.Infrastructure.Persistence.Repositories;
 using NutriMind.Infrastructure.Persistence.Services;
+using Polly;
+using Polly.Extensions.Http;
 using Resend;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -103,7 +106,8 @@ builder.Services.AddScoped<IDashboardService, DashboardService>();
 builder.Services.Configure<GeminiSettings>(builder.Configuration.GetSection("GeminiSettings"));
 
 // 2. Registrar el HttpClient y el Servicio AI
-builder.Services.AddHttpClient<IAiService, GeminiAiService>();
+builder.Services.AddHttpClient<IAiService, GeminiAiService>()
+    .AddPolicyHandler(GetGeminiRetryPolicy());
 builder.Services.AddScoped<IMealPlanService, MealPlanService>();
 builder.Services.AddScoped<IGamificationService, GamificationService>();
 
@@ -129,3 +133,13 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+// Reintentos con backoff exponencial (2s, 4s, 8s) ante 429 (saturación de Gemini) y errores
+// transitorios (5xx/408/fallas de red de bajo nivel), en vez de fallar el request al primer error.
+static IAsyncPolicy<HttpResponseMessage> GetGeminiRetryPolicy()
+{
+    return HttpPolicyExtensions
+        .HandleTransientHttpError()
+        .OrResult(response => response.StatusCode == HttpStatusCode.TooManyRequests)
+        .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
+}
