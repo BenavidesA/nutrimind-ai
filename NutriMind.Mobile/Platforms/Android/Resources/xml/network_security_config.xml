@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Android bloquea tráfico HTTP (cleartext) por defecto desde API 28. La API local corre en
+  Docker por HTTP (puerto 8080, sin certificado), así que se permite cleartext únicamente
+  hacia 10.0.2.2 (el alias del emulador hacia el localhost del host) — el resto del tráfico
+  de la app sigue exigiendo HTTPS.
+-->
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="false">10.0.2.2</domain>
+    </domain-config>
+</network-security-config>
