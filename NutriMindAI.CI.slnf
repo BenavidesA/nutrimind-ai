@@ -1,0 +1,13 @@
+{
+  "solution": {
+    "path": "NutriMindAI.sln",
+    "projects": [
+      "NutriMind.Domain/NutriMind.Domain.csproj",
+      "NutriMind.Application/NutriMind.Application.csproj",
+      "NutriMind.Infrastructure/NutriMind.Infrastructure.csproj",
+      "NutriMind.API/NutriMind.API.csproj",
+      "NutriMind.Web/NutriMind.Web.csproj",
+      "NutriMind.Tests/NutriMind.Tests.csproj"
+    ]
+  }
+}
