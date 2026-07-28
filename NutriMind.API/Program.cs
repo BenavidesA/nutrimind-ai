@@ -119,6 +119,25 @@ builder.Services.AddScoped<IEmailService, ResendEmailService>();
 
 var app = builder.Build();
 
+// Aplica migraciones de EF Core pendientes al arrancar, para que el contenedor Docker sea
+// plug & play sin pasos manuales de "dotnet ef database update". ApplicationDbContext es
+// Scoped, así que necesita su propio scope aquí en vez de resolverse desde el
+// ServiceProvider raíz. Si la base de datos no está lista o la migración falla, se registra
+// el error pero no se tira la app — así el contenedor sigue arriba y el log deja claro qué
+// pasó, en vez de crashear en un bucle silencioso.
+using (var migrationScope = app.Services.CreateScope())
+{
+    try
+    {
+        var dbContext = migrationScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        await dbContext.Database.MigrateAsync();
+    }
+    catch (Exception ex)
+    {
+        app.Logger.LogError(ex, "Error al aplicar las migraciones de EF Core al iniciar la aplicación.");
+    }
+}
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -132,7 +151,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.Run();
+await app.RunAsync();
 
 // Reintentos con backoff exponencial (2s, 4s, 8s) ante 429 (saturación de Gemini) y errores
 // transitorios (5xx/408/fallas de red de bajo nivel), en vez de fallar el request al primer error.
