@@ -1,0 +1,17 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: NutriMind.API/Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      ASPNETCORE_URLS: http://+:8080
+      # Program.cs exige estos valores al arrancar (lanza InvalidOperationException si
+      # faltan) — no hay .env en el repo por diseño (está en .gitignore). Copia
+      # ".env.example" a ".env" y completa los valores reales antes de "docker-compose up".
+      ConnectionStrings__DefaultConnection: ${CONNECTION_STRING}
+      JwtSettings__SecretKey: ${JWT_SECRET_KEY}
+      GeminiSettings__ApiKey: ${GEMINI_API_KEY}
+      ResendSettings__ApiKey: ${RESEND_API_KEY}
+      ResendSettings__DevRedirectEmail: ${RESEND_DEV_REDIRECT_EMAIL}

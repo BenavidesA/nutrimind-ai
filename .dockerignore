@@ -1,0 +1,15 @@
+**/bin/
+**/obj/
+**/.vs/
+.git/
+.github/
+
+# No forman parte de la imagen de NutriMind.API; excluirlos evita mandar al daemon de
+# Docker artefactos de build de MAUI/Android/iOS que pueden pesar varios GB.
+NutriMind.Mobile/
+NutriMind.Web/
+
+**/*.user
+**/*.suo
+.env
+.env.*

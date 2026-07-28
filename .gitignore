@@ -60,6 +60,7 @@ appsettings.*.local.json
 *.pem
 .env
 .env.*
+!.env.example
 
 ## Herramientas de IA locales (configuración de asistentes de código, no forma parte del proyecto)
 .claude/
