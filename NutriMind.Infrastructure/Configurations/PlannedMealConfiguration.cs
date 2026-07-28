@@ -16,19 +16,19 @@ public class PlannedMealConfiguration : IEntityTypeConfiguration<PlannedMeal>
         builder.Property(pm => pm.QuantityG)
             .HasPrecision(18, 2);
 
-        // Relación con MealPlan (Un plan tiene muchas comidas)
+        // Relationship with MealPlan (a plan has many meals)
         builder.HasOne(pm => pm.MealPlan)
             .WithMany(mp => mp.PlannedMeals)
             .HasForeignKey(pm => pm.MealPlanId)
-            .OnDelete(DeleteBehavior.Cascade); // Si se borra el plan, se borran sus comidas planificadas
+            .OnDelete(DeleteBehavior.Cascade); // If the plan is deleted, its planned meals are deleted too
 
-        // Relación con Food (No borrar la comida si se borra el plan)
+        // Relationship with Food (don't delete the food if the plan is deleted)
         builder.HasOne(pm => pm.Food)
             .WithMany()
             .HasForeignKey(pm => pm.FoodId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        // Relación con MealType
+        // Relationship with MealType
         builder.HasOne(pm => pm.MealType)
             .WithMany()
             .HasForeignKey(pm => pm.MealTypeId)

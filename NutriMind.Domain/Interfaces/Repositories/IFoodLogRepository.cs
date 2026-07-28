@@ -21,12 +21,12 @@ namespace NutriMind.Domain.Interfaces.Repositories
             DateTime date,
             CancellationToken cancellationToken = default);
 
-        // A diferencia de GetHistoryForUserAsync (que compara por .Date crudo, pensado para
-        // operaciones internas que ya conocen el día UTC exacto del registro), este método
-        // recibe un rango de instantes UTC ya calculado (ej. un día calendario de Ecuador
-        // convertido a su rango UTC equivalente) y compara directo, sin truncar — necesario
-        // para que las consultas "de hoy"/"de esta semana" pedidas por el cliente respeten el
-        // día calendario real en Ecuador y no el día calendario UTC del servidor.
+        // Unlike GetHistoryForUserAsync (which compares by raw .Date, intended for
+        // internal operations that already know the exact UTC day of the log), this method
+        // receives an already-computed UTC instant range (e.g. an Ecuador calendar day
+        // converted to its equivalent UTC range) and compares directly, without truncating —
+        // necessary so the "today"/"this week" queries requested by the client respect the
+        // real calendar day in Ecuador rather than the server's UTC calendar day.
         Task<IEnumerable<FoodLog>> GetLogsInUtcRangeAsync(
             Guid userId,
             DateTime startUtcInclusive,

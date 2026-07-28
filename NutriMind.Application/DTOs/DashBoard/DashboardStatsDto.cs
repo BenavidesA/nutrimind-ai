@@ -10,7 +10,7 @@ public class DashboardStatsDto
     public decimal TotalCarbs { get; set; }
     public decimal TotalFat { get; set; }
 
-    // Lista para gráficas diarias
+    // List for daily charts
     public List<DailyStatDto> DailyBreakdown { get; set; } = new();
 }
 

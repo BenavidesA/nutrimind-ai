@@ -47,15 +47,15 @@ public class GeminiAiService : IAiService
             var alergias = request.Allergies.Count > 0 ? string.Join(", ", request.Allergies) : "Ninguna";
             var ahoraLocal = EcuadorTimeHelper.ToLocal(DateTime.UtcNow);
 
-            // Catálogo real de alimentos: sin esto, la IA inventa FoodId que no existen en la BD
-            // y el plan falla al guardarse (violación de foreign key).
+            // Real food catalog: without this, the AI makes up FoodIds that don't exist in the DB
+            // and the plan fails to save (foreign key violation).
             var foods = await _foodRepository.GetAllAsync(cancellationToken);
             var catalogo = string.Join("\n", foods.Select(f => $"- {f.Id}: {f.Name}"));
 
             if (string.IsNullOrWhiteSpace(catalogo))
                 return Result<CreateMealPlanDto>.Failure("No hay alimentos en el catálogo para generar un plan.");
 
-            // 1. Armamos un prompt agresivo y claro
+            // 1. We build an aggressive and clear prompt
             var prompt = $@"
 Eres un nutricionista experto. Genera un plan de alimentación de {request.Days} días.
 Calorías diarias: {request.TargetCalories}. Dieta: {request.DietType}. Alergias: {alergias}.
@@ -79,7 +79,7 @@ Devuelve ESTRICTAMENTE un JSON válido que coincida con esta estructura de C#. N
   ]
 }}";
 
-            // 2. Construimos el cuerpo para la API de Gemini (Usando JSON Mode nativo)
+            // 2. We build the request body for the Gemini API (using native JSON Mode)
             var requestBody = new
             {
                 contents = new[] { new { parts = new[] { new { text = prompt } } } },
@@ -95,15 +95,15 @@ Devuelve ESTRICTAMENTE un JSON válido que coincida con esta estructura de C#. N
             if (!response.IsSuccessStatusCode)
             {
                 var errorText = await response.Content.ReadAsStringAsync(cancellationToken);
-                // Cambiamos el retorno para ver qué dice Google
+                // We change the return value to see what Google says
                 return Result<CreateMealPlanDto>.Failure($"Error de Google: {errorText}");
             }
 
-            // 4. Parseamos la respuesta
+            // 4. We parse the response
             var responseString = await response.Content.ReadAsStringAsync(cancellationToken);
             using var jsonDocument = JsonDocument.Parse(responseString);
 
-            // Navegamos por el árbol de respuesta de Gemini: candidates[0].content.parts[0].text
+            // We walk through Gemini's response tree: candidates[0].content.parts[0].text
             var generatedText = jsonDocument.RootElement
                 .GetProperty("candidates")[0]
                 .GetProperty("content")
@@ -113,9 +113,9 @@ Devuelve ESTRICTAMENTE un JSON válido que coincida con esta estructura de C#. N
             if (string.IsNullOrEmpty(generatedText))
                 return Result<CreateMealPlanDto>.Failure("La IA devolvió una respuesta vacía.");
 
-            // 5. Deserializamos primero a un DTO intermedio con FoodId como string: Gemini a veces
-            //    devuelve un FoodId mal formado en alguna comida puntual, y deserializar directo a
-            //    Guid descarta el plan completo por un solo elemento inválido.
+            // 5. We first deserialize into an intermediate DTO with FoodId as a string: Gemini
+            //    sometimes returns a malformed FoodId for one specific meal, and deserializing
+            //    directly to Guid would discard the entire plan over a single invalid item.
             var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
             var rawPlan = JsonSerializer.Deserialize<RawMealPlanDto>(generatedText, options);
 
@@ -161,8 +161,8 @@ Devuelve ESTRICTAMENTE un JSON válido que coincida con esta estructura de C#. N
         }
     }
 
-    // DTOs intermedios solo para parsear la respuesta cruda de Gemini de forma resiliente
-    // (FoodId como string, no Guid) — nunca se exponen fuera de este servicio.
+    // Intermediate DTOs used only to parse Gemini's raw response resiliently
+    // (FoodId as a string, not a Guid) — never exposed outside this service.
     private sealed class RawMealPlanDto
     {
         public string Name { get; set; } = string.Empty;
@@ -184,7 +184,7 @@ Devuelve ESTRICTAMENTE un JSON válido que coincida con esta estructura de C#. N
     {
         try
         {
-            // Prompt diseñado para ser nutricionista, NO para programador
+            // Prompt designed to act as a nutritionist, NOT as a programmer
             var chatPrompt = $@"Eres NutriMind AI, un nutricionista experto y empático. 
         Responde de forma natural, amigable y breve en texto plano. 
         NO uses JSON. Si el usuario te pregunta por alimentos, dales consejos saludables.";
@@ -194,7 +194,7 @@ Devuelve ESTRICTAMENTE un JSON válido que coincida con esta estructura de C#. N
                 contents = new[] {
                 new { parts = new[] { new { text = chatPrompt + " Usuario: " + userMessage } } }
             }
-                // NOTA: Eliminamos 'generationConfig' de JSON para que responda libremente
+                // NOTE: We omit 'generationConfig' from the JSON so it responds freely
             };
 
             var jsonContent = new StringContent(JsonSerializer.Serialize(requestBody), Encoding.UTF8, "application/json");
@@ -210,7 +210,7 @@ Devuelve ESTRICTAMENTE un JSON válido que coincida con esta estructura de C#. N
 
             var responseString = await response.Content.ReadAsStringAsync(cancellationToken);
 
-            // Extraer texto plano
+            // Extract plain text
             using var jsonDocument = JsonDocument.Parse(responseString);
             var text = jsonDocument.RootElement.GetProperty("candidates")[0]
                         .GetProperty("content").GetProperty("parts")[0]

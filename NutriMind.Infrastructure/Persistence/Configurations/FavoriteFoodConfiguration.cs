@@ -13,19 +13,19 @@ namespace NutriMind.Infrastructure.Persistence.Configurations
 
             builder.HasKey(ff => ff.Id);
 
-            // Relación con User
+            // Relationship with User
             builder.HasOne(ff => ff.User)
                 .WithMany(u => u.FavoriteFoods)
                 .HasForeignKey(ff => ff.UserId)
-                .OnDelete(DeleteBehavior.Cascade); // Si se borra el usuario, se borran sus favoritos.
+                .OnDelete(DeleteBehavior.Cascade); // If the user is deleted, their favorites are deleted too.
 
-            // Relación con Food
+            // Relationship with Food
             builder.HasOne(ff => ff.Food)
-                .WithMany() // No necesitamos una colección de "favoritedBy" en Food.
+                .WithMany() // We don't need a "favoritedBy" collection on Food.
                 .HasForeignKey(ff => ff.FoodId)
-                .OnDelete(DeleteBehavior.Cascade); // Si se borra el alimento, se borra de los favoritos.
+                .OnDelete(DeleteBehavior.Cascade); // If the food is deleted, it's removed from favorites.
 
-            // Restricción ÚNICA compuesta
+            // Composite UNIQUE constraint
             builder.HasIndex(ff => new { ff.UserId, ff.FoodId }).IsUnique();
             #nullable enable
         }

@@ -74,7 +74,7 @@ namespace NutriMind.Infrastructure.Authentication
 
             var response = new AuthResponseDto
             {
-                UserId = user.Id.ToString(), // Convertimos el Guid del usuario a string para que encaje con tu DTO
+                UserId = user.Id.ToString(), // We convert the user's Guid to a string so it matches the DTO
                 Email = user.Email,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
@@ -104,7 +104,7 @@ namespace NutriMind.Infrastructure.Authentication
             if (user == null || !user.IsActive)
                 return Result<AuthResponseDto>.Failure("El usuario asociado no es válido.");
 
-            // Rotación: se revoca el token usado y se emite uno nuevo, de un solo uso.
+            // Rotation: the used token is revoked and a new, single-use one is issued.
             storedToken.IsRevoked = true;
             storedToken.RevokedAt = DateTime.UtcNow;
             tokenRepo.Update(storedToken);
@@ -142,8 +142,8 @@ namespace NutriMind.Infrastructure.Authentication
             var users = await userRepo.FindAsync(u => u.Email == request.Email, cancellationToken);
             var user = users.FirstOrDefault();
 
-            // Respuesta genérica siempre exitosa, exista o no la cuenta — evita enumeración
-            // de usuarios (no revela por la respuesta si un correo está registrado).
+            // Generic response, always successful, whether or not the account exists — prevents
+            // user enumeration (the response doesn't reveal whether an email is registered).
             if (user == null || !user.IsActive)
                 return Result<bool>.Success(true);
 
@@ -161,8 +161,8 @@ namespace NutriMind.Infrastructure.Authentication
             await _unitOfWork.Repository<PasswordResetToken>().AddAsync(resetToken, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-            // El código ya quedó guardado antes de intentar el envío — un fallo de correo
-            // (ej. restricción de sandbox de Resend) no debe tumbar el flujo.
+            // The code has already been saved before attempting to send it — an email failure
+            // (e.g. Resend sandbox restriction) shouldn't break the flow.
             await _emailService.SendPasswordResetCodeAsync(user.Email, code, cancellationToken);
 
             return Result<bool>.Success(true);
@@ -193,8 +193,8 @@ namespace NutriMind.Infrastructure.Authentication
             token.IsUsed = true;
             _unitOfWork.Repository<PasswordResetToken>().Update(token);
 
-            // Igual que en el cambio de contraseña autenticado: si alguien más tenía sesión
-            // abierta con la contraseña vieja, se cierra.
+            // Same as with the authenticated password change: if someone else had a session
+            // open with the old password, it gets closed.
             await RevokeActiveRefreshTokensAsync(user.Id, cancellationToken);
 
             await _unitOfWork.SaveChangesAsync(cancellationToken);

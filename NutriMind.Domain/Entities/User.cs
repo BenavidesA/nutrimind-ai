@@ -14,9 +14,9 @@ namespace NutriMind.Domain.Entities
         public bool IsActive { get; set; }
         public bool EmailConfirmed { get; set; }
 
-        // Asegúrate de agregar estas propiedades dentro de tu clase User
+        // Make sure to add these properties inside your User class
 
-        // --- Gamificación ---
+        // --- Gamification ---
         public int CurrentStreak { get; set; } = 0;
         public int HighestStreak { get; set; } = 0;
         public DateTime? LastLogDate { get; set; }

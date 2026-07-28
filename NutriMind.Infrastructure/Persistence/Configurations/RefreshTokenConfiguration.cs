@@ -23,11 +23,11 @@ namespace NutriMind.Infrastructure.Persistence.Configurations
             builder.Property(t => t.IsRevoked)
                 .HasDefaultValue(false);
 
-            // Relación con User: Un usuario puede tener muchos RefreshTokens
+            // Relationship with User: a user can have many RefreshTokens
             builder.HasOne(t => t.User)
                 .WithMany(u => u.RefreshTokens)
                 .HasForeignKey(t => t.UserId)
-                .OnDelete(DeleteBehavior.Cascade); // Si se elimina un usuario, se eliminan sus tokens.
+                .OnDelete(DeleteBehavior.Cascade); // If a user is deleted, their tokens are deleted too.
             #nullable enable
         }
     }

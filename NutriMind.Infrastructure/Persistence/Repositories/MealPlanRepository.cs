@@ -22,7 +22,7 @@ public class MealPlanRepository : IMealPlanRepository
 
     public async Task<MealPlan?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        // Incluimos las comidas planificadas, los alimentos y los tipos de comida
+        // Include the planned meals, foods, and meal types
         return await _context.Set<MealPlan>()
             .Include(mp => mp.PlannedMeals)
                 .ThenInclude(pm => pm.Food)

@@ -89,10 +89,10 @@ public class AiController : ControllerBase
 
             var result = await _aiService.GenerateChatResponseAsync(promptConContexto, cancellationToken);
             if (result.IsSuccess)
-                // Envuelto en un objeto a propósito: un string "pelado" devuelto por Ok() cae en
-                // StringOutputFormatter (Content-Type: text/plain, sin comillas) en vez del
-                // formateador JSON, rompiendo a cualquier cliente que espere JSON (ej. Web con
-                // ReadFromJsonAsync). Un objeto siempre pasa por el formateador JSON.
+                // Wrapped in an object on purpose: a "bare" string returned by Ok() falls into
+                // StringOutputFormatter (Content-Type: text/plain, no quotes) instead of the
+                // JSON formatter, breaking any client that expects JSON (e.g. Web with
+                // ReadFromJsonAsync). An object always goes through the JSON formatter.
                 return Ok(new ChatResponse { Reply = result.Data });
 
             return BadRequest(result.ErrorMessage);

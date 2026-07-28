@@ -43,7 +43,7 @@ builder.Services.AddScoped<IFoodLogService, FoodLogService>();
 builder.Services.AddApplicationValidation();
 builder.Services.AddApplicationMappings();
 
-// --- CONFIGURACI�N JWT ---
+// --- JWT CONFIGURATION ---
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -51,9 +51,9 @@ builder.Services.AddAuthentication(options =>
 })
 .AddJwtBearer(options =>
 {
-    // Misma fuente que AuthService al firmar los tokens (JwtSettings:SecretKey vía
-    // configuración/user-secrets) — antes estaba hardcodeada aquí e ignoraba la config,
-    // lo que habría roto la validación si algún día se rotaba el valor sin tocar este archivo.
+    // Same source AuthService uses to sign the tokens (JwtSettings:SecretKey via
+    // configuration/user-secrets) — this used to be hardcoded here and ignored the config,
+    // which would have broken validation if the value was ever rotated without touching this file.
     var secretKey = configuration["JwtSettings:SecretKey"]
         ?? throw new InvalidOperationException("JwtSettings:SecretKey no está configurado.");
 
@@ -70,12 +70,12 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddControllers(options => options.Filters.Add<ValidationActionFilter>());
 builder.Services.AddEndpointsApiExplorer();
 
-// --- CONFIGURACI�N SWAGGER PARA JWT ---
+// --- SWAGGER CONFIGURATION FOR JWT ---
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "NutriMind.API", Version = "v1" });
 
-    // Configuraci�n nativa de HTTP Bearer
+    // Native HTTP Bearer configuration
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Description = "Pega tu token aqu� (NO escribas 'Bearer', solo pega el token crudo)",
@@ -103,16 +103,16 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 builder.Services.AddScoped<IDashboardService, DashboardService>();
-// 1. Registrar Settings
+// 1. Register Settings
 builder.Services.Configure<GeminiSettings>(builder.Configuration.GetSection("GeminiSettings"));
 
-// 2. Registrar el HttpClient y el Servicio AI
+// 2. Register the HttpClient and the AI Service
 builder.Services.AddHttpClient<IAiService, GeminiAiService>()
     .AddPolicyHandler(GetGeminiRetryPolicy());
 builder.Services.AddScoped<IMealPlanService, MealPlanService>();
 builder.Services.AddScoped<IGamificationService, GamificationService>();
 
-// --- RESEND (correo transaccional para recuperación de contraseña) ---
+// --- RESEND (transactional email for password recovery) ---
 builder.Services.Configure<ResendSettings>(builder.Configuration.GetSection("ResendSettings"));
 builder.Services.AddResend(builder.Configuration["ResendSettings:ApiKey"]
     ?? throw new InvalidOperationException("ResendSettings:ApiKey no está configurado."));
@@ -120,12 +120,12 @@ builder.Services.AddScoped<IEmailService, ResendEmailService>();
 
 var app = builder.Build();
 
-// Aplica migraciones de EF Core pendientes al arrancar, para que el contenedor Docker sea
-// plug & play sin pasos manuales de "dotnet ef database update". ApplicationDbContext es
-// Scoped, así que necesita su propio scope aquí en vez de resolverse desde el
-// ServiceProvider raíz. Si la base de datos no está lista o la migración falla, se registra
-// el error pero no se tira la app — así el contenedor sigue arriba y el log deja claro qué
-// pasó, en vez de crashear en un bucle silencioso.
+// Applies pending EF Core migrations on startup, so the Docker container is
+// plug & play without manual "dotnet ef database update" steps. ApplicationDbContext is
+// Scoped, so it needs its own scope here instead of being resolved from the
+// root ServiceProvider. If the database isn't ready or the migration fails, the error is
+// logged but the app isn't torn down — this way the container stays up and the log makes it
+// clear what happened, instead of crashing in a silent loop.
 using (var migrationScope = app.Services.CreateScope())
 {
     try
@@ -155,8 +155,8 @@ app.MapControllers();
 
 await app.RunAsync();
 
-// Reintentos con backoff exponencial (2s, 4s, 8s) ante 429 (saturación de Gemini) y errores
-// transitorios (5xx/408/fallas de red de bajo nivel), en vez de fallar el request al primer error.
+// Retries with exponential backoff (2s, 4s, 8s) on 429 (Gemini rate limiting) and transient
+// errors (5xx/408/low-level network failures), instead of failing the request on the first error.
 static IAsyncPolicy<HttpResponseMessage> GetGeminiRetryPolicy()
 {
     return HttpPolicyExtensions
@@ -165,11 +165,11 @@ static IAsyncPolicy<HttpResponseMessage> GetGeminiRetryPolicy()
         .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
 }
 
-// Para que el contenedor Docker sea plug & play: sin esto, la base de datos recién migrada
-// queda sin ningún usuario y un reclutador que levante "docker-compose up" no tiene con qué
-// entrar. "demoUser == null" es el único gate de idempotencia — todo el lote (usuario,
-// categoría, alimentos, registros) se siembra una sola vez, en el primer arranque contra una
-// base de datos vacía; en arranques siguientes esta función no hace nada.
+// So the Docker container is plug & play: without this, the freshly migrated database
+// is left with no user at all, and a recruiter who spins up "docker-compose up" has nothing to
+// log in with. "demoUser == null" is the only idempotency gate — the whole batch (user,
+// category, foods, logs) is seeded only once, on the first startup against an
+// empty database; on subsequent startups this function does nothing.
 static async Task SeedDemoDataAsync(ApplicationDbContext dbContext)
 {
     const string demoEmail = "demo@nutrimind.com";
@@ -178,8 +178,8 @@ static async Task SeedDemoDataAsync(ApplicationDbContext dbContext)
     if (demoUser != null)
         return;
 
-    // Mismo patrón que AuthService.RegisterAsync: no se asigna Id explícitamente, EF Core
-    // genera el Guid del usuario al insertar.
+    // Same pattern as AuthService.RegisterAsync: Id isn't assigned explicitly, EF Core
+    // generates the user's Guid on insert.
     demoUser = new User
     {
         Email = demoEmail,
@@ -202,7 +202,7 @@ static async Task SeedDemoDataAsync(ApplicationDbContext dbContext)
             IconUrl = string.Empty
         };
         dbContext.FoodCategories.Add(category);
-        // Se guarda ya para obtener el Id autogenerado antes de usarlo como FK en los Food de abajo.
+        // Saved right away to get the auto-generated Id before using it as an FK in the Foods below.
         await dbContext.SaveChangesAsync();
     }
 
@@ -254,8 +254,8 @@ static async Task SeedDemoDataAsync(ApplicationDbContext dbContext)
 
     var now = DateTime.UtcNow;
 
-    // MealTypeId 1 = Breakfast, 2 = Lunch — sembrados por MealTypeConfiguration.HasData,
-    // así que ya existen en cualquier base de datos migrada.
+    // MealTypeId 1 = Breakfast, 2 = Lunch — seeded by MealTypeConfiguration.HasData,
+    // so they already exist in any migrated database.
     var breakfastLog = new FoodLog
     {
         Id = Guid.NewGuid(),

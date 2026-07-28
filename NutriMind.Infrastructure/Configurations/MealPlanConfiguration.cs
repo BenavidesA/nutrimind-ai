@@ -20,10 +20,10 @@ public class MealPlanConfiguration : IEntityTypeConfiguration<MealPlan>
         builder.Property(mp => mp.TotalCaloriesPerDay)
             .HasPrecision(18, 2);
 
-        // Relación con User (Un usuario tiene muchos planes)
+        // Relationship with User (a user has many plans)
         builder.HasOne(mp => mp.User)
             .WithMany()
             .HasForeignKey(mp => mp.UserId)
-            .OnDelete(DeleteBehavior.Cascade); // Si se borra el usuario, se borran sus planes
+            .OnDelete(DeleteBehavior.Cascade); // If the user is deleted, their plans are deleted too
     }
 }

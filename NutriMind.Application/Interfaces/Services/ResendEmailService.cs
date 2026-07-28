@@ -33,8 +33,8 @@ public class ResendEmailService : IEmailService
                 HtmlBody = $"<p>Tu código de recuperación de contraseña es:</p><h2>{code}</h2><p>Expira en 15 minutos. Si no solicitaste este correo, ignóralo.</p>"
             };
 
-            // Resend en modo sandbox solo entrega a la dirección verificada de la cuenta,
-            // por eso en DEBUG se redirige ahí en vez de al destinatario real.
+            // Resend in sandbox mode only delivers to the account's verified address,
+            // that's why in DEBUG it's redirected there instead of to the real recipient.
 #if DEBUG
             string devEmail = _settings.DevRedirectEmail;
             message.To.Add(devEmail);
@@ -48,10 +48,10 @@ public class ResendEmailService : IEmailService
         }
         catch (Exception ex)
         {
-            // Modo sandbox de Resend: solo entrega a la dirección con la que se registró la
-            // cuenta. Un fallo de envío aquí es esperado durante pruebas — no debe tumbar el
-            // flujo de "olvidé mi contraseña" (el código ya quedó guardado en la BD antes de
-            // llegar acá).
+            // Resend sandbox mode: only delivers to the address the account was registered
+            // with. A send failure here is expected during testing — it shouldn't break the
+            // "forgot my password" flow (the code was already saved to the DB before
+            // reaching this point).
             _logger.LogError(ex, "Error enviando correo de recuperación a {Email}", toEmail);
         }
     }

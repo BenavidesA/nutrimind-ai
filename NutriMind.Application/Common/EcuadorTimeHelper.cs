@@ -2,16 +2,16 @@ using System;
 
 namespace NutriMind.Application.Common;
 
-// Ecuador usa un offset fijo de UTC-5 todo el año (no observa horario de verano/DST),
-// por lo que sumar/restar horas fijas es seguro — no hace falta TimeZoneInfo con reglas de DST.
+// Ecuador uses a fixed UTC-5 offset year-round (it does not observe daylight saving time/DST),
+// so adding/subtracting a fixed number of hours is safe — no need for TimeZoneInfo with DST rules.
 public static class EcuadorTimeHelper
 {
     private static readonly TimeSpan Offset = TimeSpan.FromHours(-5);
 
     public static DateTime ToLocal(DateTime utc) => utc.Add(Offset);
 
-    // Convierte un día calendario en hora Ecuador (la parte de hora se ignora) al instante UTC
-    // exacto en que ese día empieza (medianoche Ecuador = 05:00 UTC). Se usa para acotar rangos
-    // de consulta por día calendario de Ecuador contra columnas guardadas en UTC crudo.
+    // Converts a calendar day in Ecuador time (the time-of-day part is ignored) to the exact UTC
+    // instant at which that day starts (midnight Ecuador = 05:00 UTC). Used to bound query ranges
+    // by Ecuador calendar day against columns stored in raw UTC.
     public static DateTime EcuadorDayStartToUtc(DateTime ecuadorLocalDate) => ecuadorLocalDate.Date - Offset;
 }

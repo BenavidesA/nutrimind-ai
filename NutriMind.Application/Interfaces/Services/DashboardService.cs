@@ -29,9 +29,9 @@ public class DashboardService : IDashboardService
     {
         try
         {
-            // startDate/endDate llegan como días calendario en hora Ecuador (el cliente ya los
-            // calcula así) — se convierten al rango de instantes UTC equivalente antes de
-            // comparar contra LogDate, que se guarda en UTC crudo.
+            // startDate/endDate arrive as calendar days in Ecuador time (the client already
+            // computes them that way) — they're converted to the equivalent UTC instant range
+            // before comparing against LogDate, which is stored in raw UTC.
             var startUtc = EcuadorTimeHelper.EcuadorDayStartToUtc(startDate);
             var endUtcExclusive = EcuadorTimeHelper.EcuadorDayStartToUtc(endDate).AddDays(1);
 
@@ -41,14 +41,14 @@ public class DashboardService : IDashboardService
 
             if (logs != null && logs.Any())
             {
-                // Usamos las propiedades exactas de tu entidad FoodLog
+                // We use the exact properties of the FoodLog entity
                 stats.TotalCaloriesConsumed = logs.Sum(l => l.Calories);
                 stats.TotalProtein = logs.Sum(l => l.Protein);
                 stats.TotalCarbs = logs.Sum(l => l.Carbs);
                 stats.TotalFat = logs.Sum(l => l.Fat);
 
-                // Agrupamos por día calendario en hora Ecuador (no por .Date crudo en UTC),
-                // para que un registro de la noche no aparezca agrupado en el día siguiente.
+                // We group by calendar day in Ecuador time (not by raw .Date in UTC),
+                // so a nighttime log doesn't end up grouped into the next day.
                 stats.DailyBreakdown = logs.GroupBy(l => EcuadorTimeHelper.ToLocal(l.LogDate).Date)
                     .Select(g => new DailyStatDto
                     {

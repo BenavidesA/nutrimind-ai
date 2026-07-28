@@ -23,9 +23,9 @@ public class FoodLogServiceTests
 {
     static FoodLogServiceTests()
     {
-        // Registra el mismo mapeo Food/FoodLog -> DTO que la app configura en el arranque real
-        // (AddApplicationMappings). Sin esto, Adapt<FoodLogResponseDto> no sabe cómo llenar
-        // FoodName/MealTypeName y el test dejaría de reflejar el comportamiento de producción.
+        // Registers the same Food/FoodLog -> DTO mapping the app configures on real startup
+        // (AddApplicationMappings). Without this, Adapt<FoodLogResponseDto> wouldn't know how to fill
+        // FoodName/MealTypeName and the test would stop reflecting production behavior.
         TypeAdapterConfig.GlobalSettings.Scan(typeof(FoodMappingConfig).Assembly);
     }
 
@@ -39,10 +39,10 @@ public class FoodLogServiceTests
     private FoodLogService CreateSut() => new(
         _foodLogRepository, _foodRepository, _summaryRepository, _unitOfWork, _aiService, _logger);
 
-    // Hace que GetHistoryForUserAsync devuelva el mismo FoodLog que el servicio acaba de pasar
-    // a AddAsync, tal como haría una base de datos real inmediatamente después de un insert.
-    // Sin esto, el flujo de UpdateDailySummaryAsync y la relectura final fallarían con "not found"
-    // porque el Id se genera dentro del método bajo prueba y no se puede conocer de antemano.
+    // Makes GetHistoryForUserAsync return the same FoodLog the service just passed
+    // to AddAsync, just like a real database would immediately after an insert.
+    // Without this, the UpdateDailySummaryAsync flow and the final re-read would fail with "not found"
+    // because the Id is generated inside the method under test and can't be known ahead of time.
     private void CaptureAddedFoodLog()
     {
         FoodLog? added = null;

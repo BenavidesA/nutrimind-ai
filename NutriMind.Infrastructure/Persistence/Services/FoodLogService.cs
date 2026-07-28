@@ -158,7 +158,7 @@ namespace NutriMind.Infrastructure.Persistence.Services
             {
                 var trimmedName = dto.Name.Trim();
 
-                // 1. Buscar si el alimento ya existe en el cat�logo (evita gastar tokens de IA)
+                // 1. Check whether the food already exists in the catalog (avoids spending AI tokens)
                 var searchResults = await _foodRepository.SearchFoodsAsync(trimmedName, 1, 5, cancellationToken);
                 var existingFood = searchResults.FirstOrDefault(f =>
                     string.Equals(f.Name.Trim(), trimmedName, StringComparison.OrdinalIgnoreCase));
@@ -170,7 +170,7 @@ namespace NutriMind.Infrastructure.Persistence.Services
                 }
                 else
                 {
-                    // 2. No existe: solo aqu� se gasta una llamada a la IA
+                    // 2. It doesn't exist: only here is an AI call spent
                     var estimateResult = await _aiService.EstimateFoodNutritionAsync(trimmedName, cancellationToken);
                     if (!estimateResult.IsSuccess || estimateResult.Data == null)
                         return Result<FoodLogResponseDto>.Failure(estimateResult.ErrorMessage ?? "No se pudo estimar el valor nutricional del alimento.");
@@ -202,7 +202,7 @@ namespace NutriMind.Infrastructure.Persistence.Services
                     await _foodRepository.AddAsync(food, cancellationToken);
                 }
 
-                // 3. Calculamos el consumo real seg�n los gramos indicados
+                // 3. We calculate the actual intake based on the grams provided
                 var factor = dto.QuantityG / 100m;
                 var foodLog = new FoodLog
                 {
@@ -320,9 +320,9 @@ namespace NutriMind.Infrastructure.Persistence.Services
         {
             try
             {
-                // startDate/endDate llegan como días calendario en hora Ecuador (el cliente ya
-                // los calcula así) — se convierten al rango de instantes UTC equivalente antes
-                // de comparar contra LogDate, que se guarda en UTC crudo.
+                // startDate/endDate arrive as calendar days in Ecuador time (the client already
+                // computes them that way) — they're converted to the equivalent UTC instant range
+                // before comparing against LogDate, which is stored in raw UTC.
                 var startUtc = EcuadorTimeHelper.EcuadorDayStartToUtc(startDate);
                 var endUtcExclusive = EcuadorTimeHelper.EcuadorDayStartToUtc(endDate).AddDays(1);
 
@@ -341,7 +341,7 @@ namespace NutriMind.Infrastructure.Persistence.Services
         {
             try
             {
-                // date llega como día calendario en hora Ecuador (ver comentario arriba).
+                // date arrives as a calendar day in Ecuador time (see comment above).
                 var startUtc = EcuadorTimeHelper.EcuadorDayStartToUtc(date);
                 var endUtcExclusive = startUtc.AddDays(1);
 

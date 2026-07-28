@@ -45,20 +45,20 @@ public class UserController : ControllerBase
     [HttpGet("progress")]
     public async Task<IActionResult> GetProgress()
     {
-        // 1. Extraemos el ID del usuario desde el Token JWT
+        // 1. Extract the user ID from the JWT token
         var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
         if (!Guid.TryParse(userIdClaim, out Guid userId))
             return Unauthorized("Usuario no válido.");
 
-        // 2. Buscamos al usuario en la base de datos
+        // 2. Look up the user in the database
         var userRepo = _unitOfWork.Repository<User>();
         var user = await userRepo.GetByIdAsync(userId);
 
         if (user == null)
             return NotFound("Usuario no encontrado.");
 
-        // 3. Devolvemos solo la racha y los puntos
+        // 3. Return only the streak and points
         return Ok(new
         {
             CurrentStreak = user.CurrentStreak,

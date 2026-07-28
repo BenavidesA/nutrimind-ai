@@ -16,7 +16,7 @@ namespace NutriMind.Infrastructure.Persistence.Configurations
                 .IsRequired()
                 .HasMaxLength(100);
 
-            // Pre-cargar las medallas que GamificationService.CheckAndAwardBadgesAsync busca por nombre exacto.
+            // Pre-seed the badges that GamificationService.CheckAndAwardBadgesAsync looks up by exact name.
             builder.HasData(
                 new Badge { Id = 1, Name = "Racha de 3 Días", Description = "Registraste comida 3 días seguidos.", ImageUrl = string.Empty, PointsReward = 0 },
                 new Badge { Id = 2, Name = "Racha de 7 Días", Description = "Registraste comida 7 días seguidos.", ImageUrl = string.Empty, PointsReward = 0 }

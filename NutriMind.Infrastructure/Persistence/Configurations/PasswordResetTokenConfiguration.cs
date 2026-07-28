@@ -23,9 +23,9 @@ namespace NutriMind.Infrastructure.Persistence.Configurations
             builder.Property(t => t.IsUsed)
                 .HasDefaultValue(false);
 
-            // Relación con User: Un usuario puede tener varios intentos de reseteo
+            // Relationship with User: a user can have several reset attempts
             builder.HasOne(t => t.User)
-                .WithMany() // No necesitamos una colección de PasswordResetTokens en User
+                .WithMany() // We don't need a PasswordResetTokens collection on User
                 .HasForeignKey(t => t.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
             #nullable enable

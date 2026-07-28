@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace NutriMind.Tests.TestHelpers;
 
-// NSubstitute no puede sustituir HttpMessageHandler.SendAsync directamente (es protected),
-// así que se usa esta implementación real que delega en un delegado configurable por test.
-// Permite simular tanto respuestas HTTP (200, 429, 500...) como fallos de red/timeout.
+// NSubstitute can't substitute HttpMessageHandler.SendAsync directly (it's protected),
+// so this real implementation is used instead, delegating to a per-test configurable delegate.
+// It allows simulating both HTTP responses (200, 429, 500...) and network/timeout failures.
 internal sealed class FakeHttpMessageHandler : HttpMessageHandler
 {
     private readonly Func<HttpRequestMessage, HttpResponseMessage> _responder;

@@ -10,11 +10,11 @@ public class MealPlanDay
 
     public Guid MealPlanId { get; set; }
 
-    public int DayNumber { get; set; } // Ej: 1 para el primer día del plan
+    public int DayNumber { get; set; } // E.g.: 1 for the first day of the plan
 
     public string? Notes { get; set; }
 
-    // Propiedades de navegación
+    // Navigation properties
     public MealPlan? MealPlan { get; set; }
     public ICollection<MealPlanItem> Items { get; set; } = new List<MealPlanItem>();
 }

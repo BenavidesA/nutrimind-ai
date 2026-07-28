@@ -9,14 +9,14 @@ public class MealPlanItem
 
     public Guid MealPlanDayId { get; set; }
 
-    public Guid FoodItemId { get; set; } // Relación con la entidad FoodItem que creamos en Fase 4
+    public Guid FoodItemId { get; set; } // Relationship with the FoodItem entity we created in Phase 4
 
-    public int MealTypeId { get; set; } // Ej: 1=Desayuno, 2=Almuerzo (Relación con tu Enum/Entidad MealType)
+    public int MealTypeId { get; set; } // E.g.: 1=Breakfast, 2=Lunch (relationship with the MealType Enum/Entity)
 
-    public decimal Quantity { get; set; } // Ej: 100
+    public decimal Quantity { get; set; } // E.g.: 100
 
-    public string Unit { get; set; } = "g"; // Ej: "g", "ml", "scoop"
+    public string Unit { get; set; } = "g"; // E.g.: "g", "ml", "scoop"
 
-    // Propiedad de navegación
+    // Navigation property
     public MealPlanDay? MealPlanDay { get; set; }
 }

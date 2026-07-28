@@ -10,7 +10,7 @@ namespace NutriMind.Infrastructure.Persistence
         {
             var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
 
-            // Esta es tu base de datos local para que la consola sepa dónde crearla directamente
+            // This is the local database so the console tool knows where to create it directly
             optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=NutriMindAI_DB;Trusted_Connection=True;MultipleActiveResultSets=true");
 
             return new ApplicationDbContext(optionsBuilder.Options);

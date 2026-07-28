@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using NutriMind.Application.Common;
 using NutriMind.Application.DTOs.MealPlans;
-using NutriMind.Domain.Common; // Ajusta si tu Result<T> está en otro namespace
+using NutriMind.Domain.Common; // Adjust if your Result<T> is in a different namespace
 
 namespace NutriMind.Application.Interfaces;
 
