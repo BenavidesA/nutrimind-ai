@@ -1,12 +1,12 @@
-# Build context esperado: la raíz del repositorio (docker-compose.yml lo configura así),
-# porque NutriMind.API referencia a Domain/Application/Infrastructure como proyectos
-# hermanos fuera de esta carpeta.
+# Expected build context: the repository root (docker-compose.yml configures it that way),
+# because NutriMind.API references Domain/Application/Infrastructure as sibling projects
+# outside this folder.
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# Copia solo los .csproj primero para que la capa de "restore" se cachee entre builds
-# y no se invalide cada vez que cambia un .cs sin tocar dependencias.
+# Copy only the .csproj files first so the "restore" layer gets cached between builds
+# and isn't invalidated every time a .cs file changes without touching dependencies.
 COPY NutriMind.Domain/NutriMind.Domain.csproj NutriMind.Domain/
 COPY NutriMind.Application/NutriMind.Application.csproj NutriMind.Application/
 COPY NutriMind.Infrastructure/NutriMind.Infrastructure.csproj NutriMind.Infrastructure/

@@ -19,10 +19,10 @@ jobs:
         with:
           dotnet-version: "8.0.x"
 
-      # NutriMindAI.sln incluye NutriMind.Mobile (.NET MAUI: Android/iOS/MacCatalyst/Windows),
-      # cuyos workloads no están instalados en ubuntu-latest. Este filtro compila y prueba
-      # todo el backend (Domain, Application, Infrastructure, API, Web) y los tests, sin
-      # intentar restaurar Mobile.
+      # NutriMindAI.sln includes NutriMind.Mobile (.NET MAUI: Android/iOS/MacCatalyst/Windows),
+      # whose workloads aren't installed on ubuntu-latest. This filter builds and tests the
+      # whole backend (Domain, Application, Infrastructure, API, Web) and the tests, without
+      # trying to restore Mobile.
       - name: Restore dependencies
         run: dotnet restore NutriMindAI.CI.slnf
 

@@ -9,10 +9,10 @@ services:
     volumes:
       - mssql_data:/var/opt/mssql
     healthcheck:
-      # Prueba primero mssql-tools18 (imagen 2022, sqlcmd exige -C para confiar en el
-      # certificado autofirmado) y cae a mssql-tools si esa ruta no existe en la imagen
-      # que se descargue. depends_on de la API espera a que esto pase, no solo a que el
-      # contenedor arranque — SQL Server tarda varios segundos en aceptar conexiones.
+      # Tries mssql-tools18 first (2022 image, sqlcmd requires -C to trust the self-signed
+      # certificate) and falls back to mssql-tools if that path doesn't exist in whichever
+      # image gets pulled. The api's depends_on waits for this to pass, not just for the
+      # container to start — SQL Server takes several seconds to accept connections.
       test: [
         "CMD-SHELL",
         "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P \"$$MSSQL_SA_PASSWORD\" -C -Q 'SELECT 1' -b -o /dev/null || /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P \"$$MSSQL_SA_PASSWORD\" -Q 'SELECT 1' -b -o /dev/null"
@@ -33,15 +33,15 @@ services:
         condition: service_healthy
     environment:
       ASPNETCORE_URLS: http://+:8080
-      # Habilita Swagger UI (Program.cs solo lo mapea si IsDevelopment() es true) para poder
-      # explorar/probar la API local desde el navegador y desde la app móvil apuntando aquí.
+      # Enables Swagger UI (Program.cs only maps it when IsDevelopment() is true) so the local
+      # API can be explored/tested from a browser and from the mobile app pointing here.
       ASPNETCORE_ENVIRONMENT: Development
-      # Program.cs exige estos valores al arrancar (lanza InvalidOperationException si
-      # faltan) — no hay .env en el repo por diseño (está en .gitignore). Copia
-      # ".env.example" a ".env" y completa los valores reales antes de "docker-compose up".
-      # "db" es el nombre del servicio de arriba; Docker lo resuelve como host vía su DNS
-      # interno, y comparte la misma contraseña que MSSQL_SA_PASSWORD (una sola fuente de
-      # verdad, sin riesgo de que la API y el contenedor de la base de datos se desincronicen).
+      # Program.cs requires these values at startup (throws InvalidOperationException if
+      # missing) — there's no .env in the repo by design (it's in .gitignore). Copy
+      # ".env.example" to ".env" and fill in real values before "docker-compose up".
+      # "db" is the service name above; Docker resolves it as a host via its internal DNS,
+      # and it shares the same password as MSSQL_SA_PASSWORD (a single source of truth,
+      # with no risk of the API and the database container drifting out of sync).
       ConnectionStrings__DefaultConnection: Server=db,1433;Database=NutriMindDb;User Id=sa;Password=${DB_SA_PASSWORD};TrustServerCertificate=True
       JwtSettings__SecretKey: ${JWT_SECRET_KEY}
       GeminiSettings__ApiKey: ${GEMINI_API_KEY}
