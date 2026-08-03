@@ -6,7 +6,7 @@ The solution is a single .NET 8 backend API consumed by two independent client a
 
 ## Key Features
 
-- **AI-powered food logging ("smart add")** — when a logged food isn't already in the catalog, the backend calls the Gemini API once to estimate its macronutrients per 100g, then caches the result in the food catalog so the same lookup never needs to call the AI again.
+- **AI-powered food logging ("smart add")** — when a logged food isn't already in the catalog, the backend calls the Gemini API once to estimate its macronutrients per 100g, then persists the result in the food catalog so the same food is looked up from the database instead of calling the AI again.
 - **AI-generated meal plans** — describes a diet type, target daily calories, and allergies; Gemini returns a structured multi-day plan built exclusively from the real food catalog (to guarantee valid references) and persists it like any manually created plan.
 - **AI nutrition chat assistant** — a conversational endpoint backed by Gemini for general nutrition questions and advice.
 - **Food logging & history** — manual, quick-add, and smart-add flows for daily food logs, with per-day and date-range history and daily intake summaries.
