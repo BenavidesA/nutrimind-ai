@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using NutriMind.Application.Common;
 using NutriMind.Application.DTOs.AI;
 using NutriMind.Application.Interfaces;
@@ -35,6 +36,7 @@ public class AiController : ControllerBase
     }
 
     [HttpPost("generate-meal-plan")]
+    [EnableRateLimiting("gemini")]
     public async Task<IActionResult> GenerateMealPlan([FromBody] AiMealPlanRequestDto request, CancellationToken cancellationToken)
     {
         var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
@@ -55,6 +57,7 @@ public class AiController : ControllerBase
     }
 
     [HttpPost("chat")]
+    [EnableRateLimiting("gemini")]
     public async Task<IActionResult> Chat([FromBody] ChatRequest request, CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(request.Message))

@@ -1,6 +1,8 @@
 using System.Net;
 using System.Text;
+using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -112,6 +114,29 @@ builder.Services.AddHttpClient<IAiService, GeminiAiService>()
 builder.Services.AddScoped<IMealPlanService, MealPlanService>();
 builder.Services.AddScoped<IGamificationService, GamificationService>();
 
+// Caps calls into the paid Gemini API per user, independent of the Polly retry policy above:
+// Polly controls what happens once a request is already in flight, this controls how many
+// requests are allowed to start. Partitioned by user id (falls back to remote IP if the claim
+// isn't present) so one user maxing out their window can't starve everyone else's quota.
+builder.Services.AddRateLimiter(options =>
+{
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+
+    options.AddPolicy("gemini", httpContext =>
+    {
+        var userId = httpContext.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value
+            ?? httpContext.Connection.RemoteIpAddress?.ToString()
+            ?? "anonymous";
+
+        return RateLimitPartition.GetFixedWindowLimiter(userId, _ => new FixedWindowRateLimiterOptions
+        {
+            PermitLimit = 5,
+            Window = TimeSpan.FromMinutes(1),
+            QueueLimit = 0
+        });
+    });
+});
+
 // --- RESEND (transactional email for password recovery) ---
 builder.Services.Configure<ResendSettings>(builder.Configuration.GetSection("ResendSettings"));
 builder.Services.AddResend(builder.Configuration["ResendSettings:ApiKey"]
@@ -150,6 +175,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseRateLimiter();
 
 app.MapControllers();
 
